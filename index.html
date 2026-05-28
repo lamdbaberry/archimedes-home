@@ -15,11 +15,13 @@
 
         body {
             background: #050505;
-            min-height: 100vh;
+            height: 100vh;
+            width: 100vw;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: stretch;
+            padding: 0;
+            margin: 0;
         }
 
         /* 高级配色 - 绿色为主 */
@@ -44,11 +46,13 @@
         /* 手机框架 */
         .phone-frame {
             width: 375px;
-            height: 812px;
+            height: 100%;
             background: linear-gradient(180deg, #0D0D0D 0%, #111111 50%, #0A0A0A 100%);
             border-radius: 44px;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
             box-shadow:
                 0 0 0 1px rgba(255,255,255,0.08),
                 0 0 0 10px #141414,
@@ -163,11 +167,13 @@
         .content-area {
             position: relative;
             z-index: 1;
-            height: calc(100% - 44px - 20px - 96px - 70px);
+            flex: 1;
+            min-height: 0;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 0 20px 20px;
+            padding: 0 16px 16px;
             scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
         .content-area::-webkit-scrollbar {
             display: none;
@@ -177,6 +183,7 @@
         .page {
             display: none;
             animation: fadeIn 0.3s ease;
+            min-height: 0;
         }
         .page.active {
             display: block;
@@ -1029,7 +1036,17 @@
             display: flex;
             align-items: flex-end;
             gap: 3px;
-            padding: 8px;
+            padding: 8px 8px 8px 28px;
+            position: relative;
+        }
+
+        .detail-chart::before {
+            content: 'kWh';
+            position: absolute;
+            left: 4px;
+            top: 8px;
+            font-size: 8px;
+            color: rgba(255,255,255,0.4);
         }
 
         .detail-bar {
@@ -1281,23 +1298,25 @@
         /* 模式按钮 */
         .mode-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: 24px;
+            justify-content: center;
         }
 
         .mode-btn {
             flex: 1;
-            padding: 14px 12px;
+            padding: 14px 8px;
             border-radius: 14px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             backdrop-filter: blur(20px);
+            min-width: 0;
         }
 
         .mode-btn.active {
@@ -1398,6 +1417,16 @@
             margin-top: 4px;
         }
 
+        .scene-modal-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
         /* 策略卡片 */
         .strategy-card {
             background: var(--bg-card);
@@ -1448,6 +1477,36 @@
             font-size: 12px;
             font-weight: 600;
             margin-top: 12px;
+        }
+
+        /* 自定义设置 */
+        .custom-setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .custom-setting-row:last-child {
+            border-bottom: none;
+        }
+        .custom-setting-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .custom-select {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+        }
+        .custom-select:focus {
+            border-color: var(--green-primary);
         }
 
         /* 设置项 */
@@ -1512,90 +1571,11 @@
             font-size: 20px;
         }
 
-        /* 自定义模块样式 */
-        .settings-group {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 8px 0;
-            border: 1px solid var(--border-subtle);
-            margin-bottom: 16px;
-        }
-
-        .settings-group .settings-item {
-            background: transparent;
-            border-radius: 0;
-            border: none;
-            margin-bottom: 0;
-            padding: 16px 18px;
-        }
-
-        .settings-group .settings-item:not(:last-child) {
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .toggle-switch {
-            width: 52px;
-            height: 32px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 16px;
-            position: relative;
-            transition: background 0.3s;
-        }
-
-        .toggle-switch.on {
-            background: var(--green-primary);
-        }
-
-        .toggle-switch::after {
-            content: '';
-            width: 28px;
-            height: 28px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-        }
-
-        .toggle-switch.on::after {
-            transform: translateX(20px);
-        }
-
-        .stepper-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stepper-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
-            background: rgba(52, 199, 89, 0.2);
-            color: var(--green-primary);
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .stepper-value {
-            font-size: 16px;
-            color: var(--text-primary);
-            min-width: 50px;
-            text-align: center;
-        }
-
         /* 底部导航 */
         .bottom-nav {
             height: 70px;
             background: rgba(10, 10, 10, 0.95);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            flex-shrink: 0;
             display: flex;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -2473,15 +2453,7 @@
                         </svg>
                         <div class="soc-center-compact">
                             <div class="soc-number-compact" id="soc-value">78%</div>
-                            <div class="soc-title-compact">电池容量</div>
                             <div class="soc-kwh-compact">15.6 / 20 kWh</div>
-                            <div class="soc-health">● 健康度 96%</div>
-                            <div class="battery-indicator">
-                                <div class="battery-dot"></div>
-                                <div class="battery-dot"></div>
-                                <div class="battery-dot"></div>
-                                <div class="battery-dot"></div>
-                            </div>
                         </div>
                     </div>
                     <!-- 快速状态指示 -->
@@ -2489,17 +2461,17 @@
                         <div class="status-row">
                             <span class="status-dot solar-dot"></span>
                             <span class="status-label">光伏</span>
-                            <span class="status-val" id="solar-quick">3.2 kW</span>
+                            <span class="status-val" id="solar-quick">+3.2 kW</span>
                         </div>
                         <div class="status-row">
                             <span class="status-dot grid-dot"></span>
                             <span class="status-label">电网</span>
-                            <span class="status-val" id="grid-quick">售 0.3kW</span>
+                            <span class="status-val" id="grid-quick">-0.3 kW</span>
                         </div>
                         <div class="status-row">
                             <span class="status-dot home-dot"></span>
                             <span class="status-label">家庭</span>
-                            <span class="status-val" id="home-quick">2.1 kW</span>
+                            <span class="status-val" id="home-quick">-2.1 kW</span>
                         </div>
                     </div>
                 </div>
@@ -2516,11 +2488,11 @@
                     <div class="stats-tab-content" id="stats-solar">
                         <div class="stats-summary-row">
                             <div class="stats-summary-item">
-                                <div class="stats-summary-val gold">8.5 kWh</div>
+                                <div class="stats-summary-val gold">85 kWh</div>
                                 <div class="stats-summary-label">今日发电</div>
                             </div>
                             <div class="stats-summary-item">
-                                <div class="stats-summary-val">2.1 kW</div>
+                                <div class="stats-summary-val">21 kW</div>
                                 <div class="stats-summary-label">当前功率</div>
                             </div>
                         </div>
@@ -2530,14 +2502,14 @@
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill to-home" id="solar-to-home-bar" style="width: 65%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="solar-to-home-val">2.1 kW</div>
+                                <div class="breakdown-bar-value" id="solar-to-home-val">21 kW</div>
                             </div>
                             <div class="breakdown-bar-item">
                                 <div class="breakdown-bar-label">储能充电</div>
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill to-battery" id="solar-to-battery-bar" style="width: 25%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="solar-to-battery-val">0.8 kW</div>
+                                <div class="breakdown-bar-value" id="solar-to-battery-val">8 kW</div>
                             </div>
                             <div class="breakdown-bar-item">
                                 <div class="breakdown-bar-label">售给电网</div>
@@ -2553,7 +2525,7 @@
                     <div class="stats-tab-content" id="stats-battery" style="display:none;">
                         <div class="stats-summary-row">
                             <div class="stats-summary-item">
-                                <div class="stats-summary-val green">15.6 kWh</div>
+                                <div class="stats-summary-val green">156 kWh</div>
                                 <div class="stats-summary-label">可用电量</div>
                             </div>
                             <div class="stats-summary-item">
@@ -2567,28 +2539,28 @@
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill from-solar" id="batt-from-solar-bar" style="width: 60%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="batt-from-solar-val">0.8 kW</div>
+                                <div class="breakdown-bar-value" id="batt-from-solar-val">8 kW</div>
                             </div>
                             <div class="breakdown-bar-item">
                                 <div class="breakdown-bar-label">来自电网</div>
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill from-grid" id="batt-from-grid-bar" style="width: 20%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="batt-from-grid-val">0.3 kW</div>
+                                <div class="breakdown-bar-value" id="batt-from-grid-val">3 kW</div>
                             </div>
                             <div class="breakdown-bar-item">
                                 <div class="breakdown-bar-label">家庭使用</div>
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill from-home" id="batt-to-home-bar" style="width: 40%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="batt-to-home-val">0.5 kW</div>
+                                <div class="breakdown-bar-value" id="batt-to-home-val">5 kW</div>
                             </div>
                             <div class="breakdown-bar-item">
                                 <div class="breakdown-bar-label">售给电网</div>
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill to-grid" id="batt-to-grid-bar" style="width: 10%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="batt-to-grid-val">0.1 kW</div>
+                                <div class="breakdown-bar-value" id="batt-to-grid-val">1 kW</div>
                             </div>
                         </div>
                     </div>
@@ -2597,11 +2569,11 @@
                     <div class="stats-tab-content" id="stats-home" style="display:none;">
                         <div class="stats-summary-row">
                             <div class="stats-summary-item">
-                                <div class="stats-summary-val">12.3 kWh</div>
+                                <div class="stats-summary-val">123 kWh</div>
                                 <div class="stats-summary-label">今日用电</div>
                             </div>
                             <div class="stats-summary-item">
-                                <div class="stats-summary-val">2.1 kW</div>
+                                <div class="stats-summary-val">21 kW</div>
                                 <div class="stats-summary-label">当前功率</div>
                             </div>
                         </div>
@@ -2611,21 +2583,21 @@
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill from-solar" id="home-from-solar-bar" style="width: 70%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="home-from-solar-val">2.1 kW</div>
+                                <div class="breakdown-bar-value" id="home-from-solar-val">21 kW</div>
                             </div>
                             <div class="breakdown-bar-item">
                                 <div class="breakdown-bar-label">来自电网</div>
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill from-grid" id="home-from-grid-bar" style="width: 20%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="home-from-grid-val">0.5 kW</div>
+                                <div class="breakdown-bar-value" id="home-from-grid-val">5 kW</div>
                             </div>
                             <div class="breakdown-bar-item">
                                 <div class="breakdown-bar-label">来自电池</div>
                                 <div class="breakdown-bar-track">
                                     <div class="breakdown-bar-fill from-battery" id="home-from-battery-bar" style="width: 10%;"></div>
                                 </div>
-                                <div class="breakdown-bar-value" id="home-from-battery-val">0.3 kW</div>
+                                <div class="breakdown-bar-value" id="home-from-battery-val">3 kW</div>
                             </div>
                         </div>
                     </div>
@@ -2649,16 +2621,17 @@
                                 </linearGradient>
                             </defs>
                             <!-- Y轴标签 -->
-                            <text x="32" y="25" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="end">50kW</text>
-                            <text x="32" y="50" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="end">25kW</text>
-                            <text x="32" y="75" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="end">0kW</text>
-                            <text x="32" y="98" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="end">-25kW</text>
-                            <!-- Y轴线 -->
-                            <line x1="40" y1="5" x2="40" y2="95" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <text x="2" y="15" fill="rgba(255,255,255,0.6)" font-size="10">kW</text>
+                            <text x="2" y="38" fill="rgba(255,255,255,0.5)" font-size="10">50</text>
+                            <text x="2" y="62" fill="rgba(255,255,255,0.5)" font-size="10">25</text>
+                            <text x="2" y="87" fill="rgba(255,255,255,0.5)" font-size="10">0</text>
                             <!-- 背景网格 -->
-                            <line x1="40" y1="50" x2="340" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="40" y1="25" x2="340" y2="25" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="40" y1="75" x2="340" y2="75" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="10" x2="320" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="35" x2="320" y2="35" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="60" x2="320" y2="60" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <line x1="40" y1="85" x2="320" y2="85" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <!-- Y轴线 -->
+                            <line x1="40" y1="5" x2="40" y2="95" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
                             <!-- 光伏曲线 (白天高，晚上低) -->
                             <path id="solar-curve" d="" fill="none" stroke="#FF9500" stroke-width="2"/>
                             <!-- 家庭用电曲线 -->
@@ -2668,7 +2641,7 @@
                             <!-- 电网状态曲线 (正=卖，负=买) -->
                             <path id="grid-curve" d="" fill="none" stroke="#FFCC00" stroke-width="2"/>
                             <!-- 时间标记线 -->
-                            <line id="time-marker-line" x1="190" y1="5" x2="190" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line id="time-marker-line" x1="150" y1="5" x2="150" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
                         </svg>
                     </div>
                     <div class="curve-labels">
@@ -2687,19 +2660,19 @@
                     <div class="section-title">今日统计</div>
                     <div class="stats-grid">
                         <div class="stat-item" onclick="showStatDetail('solar')">
-                            <div class="stat-value gold" id="solar-total">8.5 kWh</div>
+                            <div class="stat-value gold" id="solar-total">85 kWh</div>
                             <div class="stat-label">发电量</div>
                         </div>
                         <div class="stat-item" onclick="showStatDetail('load')">
-                            <div class="stat-value" id="load-total">12.3 kWh</div>
+                            <div class="stat-value" id="load-total">123 kWh</div>
                             <div class="stat-label">用电量</div>
                         </div>
                         <div class="stat-item" onclick="showStatDetail('cost')">
-                            <div class="stat-value red" id="cost">¥3.69</div>
+                            <div class="stat-value red" id="cost">¥36.9</div>
                             <div class="stat-label">今日电费</div>
                         </div>
                         <div class="stat-item" onclick="showStatDetail('saving')">
-                            <div class="stat-value green" id="saving">¥2.55</div>
+                            <div class="stat-value green" id="saving">¥25.5</div>
                             <div class="stat-label">节省电费</div>
                         </div>
                     </div>
@@ -2902,27 +2875,34 @@
                         <span class="chart-title">📈 今日充放电曲线</span>
                         <span class="chart-mode-badge" id="chart-mode-badge">自动模式</span>
                     </div>
-                    <svg class="curve-svg" viewBox="0 0 300 120" preserveAspectRatio="none">
+                    <svg class="curve-svg" viewBox="0 0 340 120" preserveAspectRatio="none">
+                        <!-- Y轴标签 -->
+                        <text x="2" y="18" fill="rgba(255,255,255,0.6)" font-size="10">kW</text>
+                        <text x="2" y="32" fill="rgba(255,255,255,0.5)" font-size="10">1.5</text>
+                        <text x="2" y="62" fill="rgba(255,255,255,0.5)" font-size="10">0.5</text>
+                        <text x="2" y="100" fill="rgba(255,255,255,0.5)" font-size="10">0</text>
+                        <!-- Y轴线 -->
+                        <line x1="40" y1="10" x2="40" y2="110" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
                         <!-- 背景网格 -->
                         <g class="grid-lines">
-                            <line x1="0" y1="30" x2="300" y2="30" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="0" y1="60" x2="300" y2="60" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="0" y1="90" x2="300" y2="90" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="30" x2="320" y2="30" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="60" x2="320" y2="60" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="90" x2="320" y2="90" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
                         </g>
                         <!-- 电价曲线 (金色虚线, 右侧Y轴) -->
                         <path class="price-curve"
-                            d="M 0 85 Q 30 88, 60 90 T 90 88 T 120 40 T 150 30 T 180 35 T 210 38 T 240 75 T 270 80 T 300 82"
+                            d="M 40 85 Q 70 88, 100 90 T 130 88 T 160 40 T 190 30 T 220 35 T 250 38 T 280 75 T 310 80 T 340 82"
                             fill="none" stroke="#C9A227" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
                         <!-- 充电曲线 (绿色) -->
                         <path class="charge-curve" id="charge-curve"
-                            d="M 0 72 Q 30 66, 60 54 T 120 42 T 180 48 T 240 60 T 300 66"
+                            d="M 40 72 Q 70 66, 100 54 T 160 42 T 220 48 T 280 60 T 340 66"
                             fill="none" stroke="#34C759" stroke-width="2"/>
                         <!-- 放电曲线 (橙色) -->
                         <path class="discharge-curve" id="discharge-curve"
-                            d="M 0 48 Q 30 54, 60 66 T 120 72 T 180 70 T 240 74 T 300 60"
+                            d="M 40 48 Q 70 54, 100 66 T 160 72 T 220 70 T 280 74 T 340 60"
                             fill="none" stroke="#FF9500" stroke-width="2" opacity="0.7"/>
                         <!-- 当前时间标记 -->
-                        <line class="time-marker" id="time-marker" x1="180" y1="0" x2="180" y2="120"
+                        <line class="time-marker" id="time-marker" x1="180" y1="10" x2="180" y2="110"
                             stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
                     </svg>
                     <div class="chart-labels">
@@ -2960,50 +2940,62 @@
                 <!-- 场景模式 -->
                 <div class="section-title">场景模式</div>
                 <div class="scene-grid">
-                    <div class="scene-card ai-scene" onclick="setScene(this)">
+                    <div class="scene-card ai-scene" onclick="showSceneModal('ai')">
                         <div class="scene-card-icon">🤖</div>
                         <div class="scene-card-name">AI模式</div>
                         <div class="scene-card-desc">智能调度</div>
                     </div>
-                    <div class="scene-card active" onclick="setScene(this)">
+                    <div class="scene-card" onclick="showSceneModal('home')">
                         <div class="scene-card-icon">🏠</div>
                         <div class="scene-card-name">在家模式</div>
                         <div class="scene-card-desc">舒适优先</div>
                     </div>
-                    <div class="scene-card" onclick="setScene(this)">
+                    <div class="scene-card" onclick="showSceneModal('away')">
                         <div class="scene-card-icon">🌙</div>
                         <div class="scene-card-name">离家模式</div>
                         <div class="scene-card-desc">节能优先</div>
                     </div>
-                    <div class="scene-card" onclick="setScene(this)">
+                    <div class="scene-card" onclick="showSceneModal('backup')">
                         <div class="scene-card-icon">🛡️</div>
                         <div class="scene-card-name">备电保障</div>
                         <div class="scene-card-desc">预留50%应急</div>
                     </div>
-                    <div class="scene-card" onclick="setScene(this)">
+                    <div class="scene-card" onclick="showSceneModal('economy')">
                         <div class="scene-card-icon">💰</div>
                         <div class="scene-card-name">经济模式</div>
                         <div class="scene-card-desc">最大化套利</div>
                     </div>
-                    <div class="scene-card" onclick="setScene(this)">
+                    <div class="scene-card" onclick="showSceneModal('custom')">
                         <div class="scene-card-icon">⚙️</div>
                         <div class="scene-card-name">自定义</div>
                         <div class="scene-card-desc">DIY设置</div>
                     </div>
                 </div>
 
+                <!-- 场景设置弹窗 -->
+                <div class="modal-overlay" id="scene-modal" style="display:none;">
+                    <div class="stat-detail-content">
+                        <div class="modal-header">
+                            <span class="modal-title" id="scene-modal-title">模式设置</span>
+                            <span class="modal-close" onclick="closeSceneModal()">✕</span>
+                        </div>
+                        <div class="modal-body" id="scene-modal-body"></div>
+                    </div>
+                </div>
+
                 <div class="divider"></div>
 
-                <!-- 策略卡片 -->
+                <!-- 智能调度 -->
+                <div class="section-title">智能调度</div>
                 <div class="strategy-card">
                     <div class="strategy-header">
                         <div class="strategy-icon">📊</div>
                         <div class="strategy-name">AI峰谷套利</div>
                     </div>
                     <div class="strategy-desc">
-                        自动在低谷时段充电(¥0.31/kWh)，高峰时段放电(¥0.82/kWh)，预计每月节省电费¥150-200
+                        自动在低谷时段充电(¥0.31/kWh)，高峰时段放电(¥0.82/kWh)，预计每月节省电费¥1500-2000
                     </div>
-                    <div class="strategy-badge">预计节省 ¥180/月</div>
+                    <div class="strategy-badge">预计节省 ¥1800/月</div>
                 </div>
 
                 <div class="strategy-card">
@@ -3015,53 +3007,6 @@
                         白天优先使用光伏发电，多余电量自动存入电池，减少电网依赖
                     </div>
                     <div class="strategy-badge">自发自用率 85%</div>
-                </div>
-            </div>
-
-            <!-- 自定义模块 -->
-            <div class="page" id="page-custom" style="display:none;">
-                <div class="page-title">自定义设置</div>
-
-                <!-- 太阳能策略 -->
-                <div class="section-title">太阳能策略</div>
-                <div class="settings-group">
-                    <div class="settings-item" onclick="toggleStrategy(this)">
-                        <div class="settings-text">
-                            <div class="settings-title">自用优先</div>
-                            <div class="settings-subtitle">光伏电量优先供给家庭使用</div>
-                        </div>
-                        <div class="toggle-switch on"></div>
-                    </div>
-                    <div class="settings-item" onclick="toggleStrategy(this)">
-                        <div class="settings-text">
-                            <div class="settings-title">存储优先</div>
-                            <div class="settings-subtitle">多余电量存入电池</div>
-                        </div>
-                        <div class="toggle-switch"></div>
-                    </div>
-                    <div class="settings-item" onclick="toggleStrategy(this)">
-                        <div class="settings-text">
-                            <div class="settings-title">出售优先</div>
-                            <div class="settings-subtitle">多余电量出售给电网</div>
-                        </div>
-                        <div class="toggle-switch"></div>
-                    </div>
-                </div>
-
-                <!-- 电池最低限制 -->
-                <div class="section-title" style="margin-top:24px;">电池最低限制</div>
-                <div class="settings-group">
-                    <div class="settings-item">
-                        <div class="settings-text">
-                            <div class="settings-title">最低SOC限制</div>
-                            <div class="settings-subtitle">防止电池过放</div>
-                        </div>
-                        <div class="stepper-control">
-                            <div class="stepper-btn" onclick="adjustMinLimit(-5)">−</div>
-                            <div class="stepper-value" id="min-soc-value">20%</div>
-                            <div class="stepper-btn" onclick="adjustMinLimit(5)">+</div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -3197,40 +3142,16 @@
                 </div>
                 <div class="nav-label">模式</div>
             </div>
-            <div class="nav-item" onclick="switchPage('custom')">
-                <div class="nav-icon">
-                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-                    </svg>
-                </div>
-                <div class="nav-label">自定义</div>
-            </div>
         </div>
     </div>
 
     <script>
         // 页面切换
         function switchPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            const targetPage = document.getElementById('page-' + page);
-            if (targetPage) targetPage.style.display = 'block';
-            if (event && event.currentTarget) {
-                event.currentTarget.classList.add('active');
-            }
-        }
-
-        function toggleStrategy(el) {
-            const switchEl = el.querySelector('.toggle-switch');
-            switchEl.classList.toggle('on');
-        }
-
-        function adjustMinLimit(delta) {
-            const valueEl = document.getElementById('min-soc-value');
-            let val = parseInt(valueEl.textContent) || 20;
-            val = Math.max(10, Math.min(50, val + delta));
-            valueEl.textContent = val + '%';
+            document.getElementById('page-' + page).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
         // 设备开关
@@ -3400,10 +3321,113 @@
             }, 3000);
         }
 
-        // 场景选择
-        function setScene(el) {
-            document.querySelectorAll('.scene-card').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
+        // 场景模式弹窗
+        function showSceneModal(mode) {
+            const modal = document.getElementById('scene-modal');
+            const title = document.getElementById('scene-modal-title');
+            const body = document.getElementById('scene-modal-body');
+
+            const modes = {
+                'ai': {
+                    name: 'AI模式',
+                    desc: 'AI智能调度，根据电价自动峰谷套利',
+                    icon: '🤖'
+                },
+                'home': {
+                    name: '在家模式',
+                    desc: '优先保证家庭用电舒适度，光伏充足时开启所有设备',
+                    icon: '🏠'
+                },
+                'away': {
+                    name: '离家模式',
+                    desc: '离家时自动进入节能模式，减少不必要的能耗',
+                    icon: '🌙'
+                },
+                'backup': {
+                    name: '备电保障',
+                    desc: '保留50%电量作为应急备用，保证突发断电时供电',
+                    icon: '🛡️'
+                },
+                'economy': {
+                    name: '经济模式',
+                    desc: '最大化峰谷套利收益，在低谷储电、高峰放电',
+                    icon: '💰'
+                },
+                'custom': {
+                    name: '自定义模式',
+                    desc: '自定义光伏分配策略和储能保底',
+                    icon: '⚙️'
+                }
+            };
+
+            const m = modes[mode];
+            title.textContent = m.icon + ' ' + m.name;
+
+            let content = `<div class="scene-modal-desc">${m.desc}</div>`;
+
+            if (mode === 'custom') {
+                content += `
+                    <div class="custom-setting-row">
+                        <span class="custom-setting-label">优先使用</span>
+                        <select class="custom-select">
+                            <option value="home">先家庭使用</option>
+                            <option value="battery">先储能</option>
+                            <option value="grid">先卖电网</option>
+                        </select>
+                    </div>
+                    <div class="custom-setting-row">
+                        <span class="custom-setting-label">储能保底</span>
+                        <select class="custom-select">
+                            <option value="10">10%</option>
+                            <option value="20">20%</option>
+                            <option value="30">30%</option>
+                            <option value="50">50%</option>
+                        </select>
+                    </div>
+                    <button class="submit-btn" onclick="closeSceneModal()">保存设置</button>
+                `;
+            } else if (mode === 'backup') {
+                content += `
+                    <div class="custom-setting-row">
+                        <span class="custom-setting-label">保底容量</span>
+                        <select class="custom-select">
+                            <option value="30">30%</option>
+                            <option value="40">40%</option>
+                            <option value="50" selected>50%</option>
+                            <option value="60">60%</option>
+                        </select>
+                    </div>
+                    <button class="submit-btn" onclick="closeSceneModal()">保存设置</button>
+                `;
+            } else if (mode === 'economy') {
+                content += `
+                    <div class="custom-setting-row">
+                        <span class="custom-setting-label">谷时充电时段</span>
+                        <select class="custom-select">
+                            <option value="all">全天低谷时段</option>
+                            <option value="night">仅夜间(23-7点)</option>
+                        </select>
+                    </div>
+                    <div class="custom-setting-row">
+                        <span class="custom-setting-label">高峰放电阈值</span>
+                        <select class="custom-select">
+                            <option value="0.6">¥0.60/kWh</option>
+                            <option value="0.7">¥0.70/kWh</option>
+                            <option value="0.8" selected>¥0.82/kWh</option>
+                        </select>
+                    </div>
+                    <button class="submit-btn" onclick="closeSceneModal()">保存设置</button>
+                `;
+            } else {
+                content += `<button class="submit-btn" onclick="closeSceneModal()">确定</button>`;
+            }
+
+            body.innerHTML = content;
+            modal.style.display = 'flex';
+        }
+
+        function closeSceneModal() {
+            document.getElementById('scene-modal').style.display = 'none';
         }
 
         // 更新SOC环形图
@@ -3540,14 +3564,14 @@
             if (station === 'devices') multiplier = 0.3;
 
             return {
-                solar: +(solar * multiplier * 10).toFixed(2),
-                load: +(load * multiplier * 10).toFixed(2),
-                solarToHome: +(Math.min(solar, load) * multiplier * 10).toFixed(2),
-                solarToBattery: +(batteryCharge * multiplier * 10).toFixed(2),
-                solarToGrid: +(gridSell * multiplier * 10).toFixed(2),
-                homeFromSolar: +(Math.min(solar, load) * multiplier * 10).toFixed(2),
-                homeFromGrid: +(gridBuy * multiplier * 10).toFixed(2),
-                homeFromBattery: +(batteryDischarge * multiplier * 10).toFixed(2)
+                solar: +(solar * multiplier).toFixed(2),
+                load: +(load * multiplier).toFixed(2),
+                solarToHome: +(Math.min(solar, load) * multiplier).toFixed(2),
+                solarToBattery: +(batteryCharge * multiplier).toFixed(2),
+                solarToGrid: +(gridSell * multiplier).toFixed(2),
+                homeFromSolar: +(Math.min(solar, load) * multiplier).toFixed(2),
+                homeFromGrid: +(gridBuy * multiplier).toFixed(2),
+                homeFromBattery: +(batteryDischarge * multiplier).toFixed(2)
             };
         }
 
@@ -3560,12 +3584,11 @@
             const data = generateHourlyData(date, hour, station);
 
             // 更新快速状态
-            const solarSign = data.solar >= 0 ? '+' : '';
-            const gridSign = data.solarToGrid > 0 ? '+' : (data.homeFromGrid > 0 ? '-' : '');
-            document.getElementById('solar-quick').textContent = solarSign + data.solar + ' kW';
-            document.getElementById('home-quick').textContent = '+' + data.load + ' kW';
-            const gridText = data.solarToGrid > 0 ? '+' + data.solarToGrid + ' kW' : '-' + data.homeFromGrid + ' kW';
-            document.getElementById('grid-quick').textContent = gridText;
+            document.getElementById('solar-quick').textContent = '+' + data.solar + ' kW';
+            document.getElementById('home-quick').textContent = '-' + data.load + ' kW';
+            const gridSign = data.solarToGrid > data.homeFromGrid ? '+' : '-';
+            const gridVal = data.solarToGrid > data.homeFromGrid ? data.solarToGrid : data.homeFromGrid;
+            document.getElementById('grid-quick').textContent = gridSign + gridVal + ' kW';
 
             // 更新光伏Tab
             document.getElementById('solar-to-home-val').textContent = data.solarToHome + ' kW';
@@ -3584,6 +3607,9 @@
             document.getElementById('home-from-solar-bar').style.width = (data.homeFromSolar / loadTotal * 100) + '%';
             document.getElementById('home-from-grid-bar').style.width = (data.homeFromGrid / loadTotal * 100) + '%';
             document.getElementById('home-from-battery-bar').style.width = (data.homeFromBattery / loadTotal * 100) + '%';
+
+            // 同时更新功率曲线
+            drawPowerCurve();
         }
 
         // ===== 能源统计Tab切换 =====
@@ -3599,7 +3625,7 @@
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
-            const currentPos = 40 + (currentHour * 60 + currentMinute) / (24 * 60) * 300;
+            const currentPos = 40 + (currentHour * 60 + currentMinute) / (24 * 60) * 280;
 
             // 生成24小时数据点
             const solarPoints = [];
@@ -3608,23 +3634,38 @@
             const gridPoints = [];
 
             for (let h = 0; h <= 24; h++) {
-                const x = 40 + h / 24 * 300;
+                const x = 40 + h / 24 * 280;
                 const isDay = h >= 6 && h <= 18;
                 const solarVal = isDay ? Math.sin((h - 6) / 12 * Math.PI) * 45 + 5 : 2;
                 const loadVal = isDay ? (h >= 10 && h <= 22 ? 35 + Math.random() * 20 : 15 + Math.random() * 10) : 10 + Math.random() * 8;
                 const battVal = solarVal > loadVal ? (solarVal - loadVal) * 0.5 : -(loadVal - solarVal) * 0.3;
                 const gridVal = solarVal - loadVal - battVal;
 
-                solarPoints.push(`${x},${75 - solarVal}`);
-                loadPoints.push(`${x},${75 - loadVal}`);
-                batteryPoints.push(`${x},${75 - battVal * 0.5}`);
-                gridPoints.push(`${x},${75 - gridVal * 0.5}`);
+                solarPoints.push(`${x},${60 - solarVal}`);
+                loadPoints.push(`${x},${60 - loadVal}`);
+                batteryPoints.push(`${x},${50 - battVal * 0.5}`);
+                gridPoints.push(`${x},${50 - gridVal * 0.5}`);
             }
 
-            document.getElementById('solar-curve').setAttribute('d', 'M ' + solarPoints.join(' L '));
-            document.getElementById('load-curve').setAttribute('d', 'M ' + loadPoints.join(' L '));
-            document.getElementById('battery-curve').setAttribute('d', 'M ' + batteryPoints.join(' L '));
-            document.getElementById('grid-curve').setAttribute('d', 'M ' + gridPoints.join(' L '));
+            // 使用平滑曲线(Cubic Bezier)替代折线
+            const smoothLine = (points) => {
+                if (points.length < 2) return '';
+                let d = 'M ' + points[0];
+                for (let i = 1; i < points.length; i++) {
+                    const prev = points[i - 1].split(',');
+                    const curr = points[i].split(',');
+                    const cpx = (parseFloat(prev[0]) + parseFloat(curr[0])) / 2;
+                    d += ' Q ' + prev[0] + ',' + prev[1] + ' ' + cpx + ',' + (parseFloat(prev[1]) + parseFloat(curr[1])) / 2;
+                }
+                const last = points[points.length - 1].split(',');
+                d += ' T ' + last[0] + ',' + last[1];
+                return d;
+            };
+
+            document.getElementById('solar-curve').setAttribute('d', smoothLine(solarPoints));
+            document.getElementById('load-curve').setAttribute('d', smoothLine(loadPoints));
+            document.getElementById('battery-curve').setAttribute('d', smoothLine(batteryPoints));
+            document.getElementById('grid-curve').setAttribute('d', smoothLine(gridPoints));
             document.getElementById('time-marker-line').setAttribute('x1', currentPos);
             document.getElementById('time-marker-line').setAttribute('x2', currentPos);
         }
@@ -3681,11 +3722,11 @@
                 </div>
                 <div class="detail-section">
                     <div class="detail-section-title">发电统计</div>
-                    <div class="detail-row"><span class="detail-row-label">今日总发电</span><span class="detail-row-value gold">8.5 kWh</span></div>
-                    <div class="detail-row"><span class="detail-row-label">高峰时段(10-18点)</span><span class="detail-row-value">5.2 kWh</span></div>
-                    <div class="detail-row"><span class="detail-row-label">平段时段(7-10,18-23点)</span><span class="detail-row-value">2.8 kWh</span></div>
-                    <div class="detail-row"><span class="detail-row-label">谷段时段(23-7点)</span><span class="detail-row-value">0.5 kWh</span></div>
-                    <div class="detail-row"><span class="detail-row-label">最高发电时刻</span><span class="detail-row-value">12:00 · 4.2 kW</span></div>
+                    <div class="detail-row"><span class="detail-row-label">今日总发电</span><span class="detail-row-value gold">85 kWh</span></div>
+                    <div class="detail-row"><span class="detail-row-label">高峰时段(10-18点)</span><span class="detail-row-value">52 kWh</span></div>
+                    <div class="detail-row"><span class="detail-row-label">平段时段(7-10,18-23点)</span><span class="detail-row-value">28 kWh</span></div>
+                    <div class="detail-row"><span class="detail-row-label">谷段时段(23-7点)</span><span class="detail-row-value">5 kWh</span></div>
+                    <div class="detail-row"><span class="detail-row-label">最高发电时刻</span><span class="detail-row-value">12:00 · 42 kW</span></div>
                 </div>
             `;
         }
@@ -3735,15 +3776,15 @@
             return `
                 <div class="detail-section">
                     <div class="detail-section-title">电费计算明细</div>
-                    <div class="detail-row"><span class="detail-row-label">高峰时段(10-20点)</span><span class="detail-row-value red">¥2.35</span></div>
-                    <div class="detail-row"><span class="detail-row-label">平时段(7-10,20-23点)</span><span class="detail-row-value">¥1.02</span></div>
-                    <div class="detail-row"><span class="detail-row-label">谷时段(23-7点)</span><span class="detail-row-value green">¥0.32</span></div>
+                    <div class="detail-row"><span class="detail-row-label">高峰时段(10-20点)</span><span class="detail-row-value red">¥23.5</span></div>
+                    <div class="detail-row"><span class="detail-row-label">平时段(7-10,20-23点)</span><span class="detail-row-value">¥10.2</span></div>
+                    <div class="detail-row"><span class="detail-row-label">谷时段(23-7点)</span><span class="detail-row-value green">¥3.2</span></div>
                 </div>
                 <div class="detail-section">
                     <div class="detail-section-title">用电来源</div>
-                    <div class="detail-row"><span class="detail-row-label">来自光伏</span><span class="detail-row-value green">8.5 kWh → 节省 ¥2.64</span></div>
-                    <div class="detail-row"><span class="detail-row-label">来自储能放电</span><span class="detail-row-value green">2.1 kWh → 节省 ¥0.65</span></div>
-                    <div class="detail-row"><span class="detail-row-label">来自电网购买</span><span class="detail-row-value red">3.8 kWh → ¥1.14</span></div>
+                    <div class="detail-row"><span class="detail-row-label">来自光伏</span><span class="detail-row-value green">85 kWh → 节省 ¥26.4</span></div>
+                    <div class="detail-row"><span class="detail-row-label">来自储能放电</span><span class="detail-row-value green">21 kWh → 节省 ¥6.5</span></div>
+                    <div class="detail-row"><span class="detail-row-label">来自电网购买</span><span class="detail-row-value red">38 kWh → ¥11.4</span></div>
                 </div>
                 <div class="detail-section">
                     <div class="detail-section-title">电价配置</div>
@@ -3758,16 +3799,16 @@
             return `
                 <div class="detail-section">
                     <div class="detail-section-title">节省来源明细</div>
-                    <div class="detail-row"><span class="detail-row-label">光伏自用节省</span><span class="detail-row-value green">¥1.85</span></div>
-                    <div class="detail-row"><span class="detail-row-label">谷时储电高峰放电</span><span class="detail-row-value green">¥0.45</span></div>
-                    <div class="detail-row"><span class="detail-row-label">余电卖给电网</span><span class="detail-row-value gold">¥0.25</span></div>
+                    <div class="detail-row"><span class="detail-row-label">光伏自用节省</span><span class="detail-row-value green">¥18.5</span></div>
+                    <div class="detail-row"><span class="detail-row-label">谷时储电高峰放电</span><span class="detail-row-value green">¥4.5</span></div>
+                    <div class="detail-row"><span class="detail-row-label">余电卖给电网</span><span class="detail-row-value gold">¥2.5</span></div>
                 </div>
                 <div class="detail-section">
                     <div class="detail-section-title">本月累计节省</div>
-                    <div class="detail-row"><span class="detail-row-label">本月发电</span><span class="detail-row-value gold">186.5 kWh</span></div>
-                    <div class="detail-row"><span class="detail-row-label">本月节省电费</span><span class="detail-row-value green">¥65.8</span></div>
-                    <div class="detail-row"><span class="detail-row-label">卖电收入</span><span class="detail-row-value gold">¥12.3</span></div>
-                    <div class="detail-row"><span class="detail-row-label">碳减排贡献</span><span class="detail-row-value">约 74.6 kg CO₂</span></div>
+                    <div class="detail-row"><span class="detail-row-label">本月发电</span><span class="detail-row-value gold">1865 kWh</span></div>
+                    <div class="detail-row"><span class="detail-row-label">本月节省电费</span><span class="detail-row-value green">¥658</span></div>
+                    <div class="detail-row"><span class="detail-row-label">卖电收入</span><span class="detail-row-value gold">¥123</span></div>
+                    <div class="detail-row"><span class="detail-row-label">碳减排贡献</span><span class="detail-row-value">约 746 kg CO₂</span></div>
                 </div>
             `;
         }
@@ -3776,6 +3817,7 @@
         initDateSelector();
         updateBreakdownData();
         drawPowerCurve();
+        setInterval(drawPowerCurve, 60000); // 每分钟更新曲线
     </script>
 </body>
 </html>
