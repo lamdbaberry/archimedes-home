@@ -3625,9 +3625,10 @@
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
-            const currentPos = 40 + (currentHour * 60 + currentMinute) / (24 * 60) * 280;
+            const currentSecond = now.getSeconds();
+            const currentPos = 40 + (currentHour * 3600 + currentMinute * 60 + currentSecond) / (24 * 3600) * 280;
 
-            // 生成24小时数据点
+            // 生成24小时数据点（使用固定算法，无随机）
             const solarPoints = [];
             const loadPoints = [];
             const batteryPoints = [];
@@ -3636,8 +3637,9 @@
             for (let h = 0; h <= 24; h++) {
                 const x = 40 + h / 24 * 280;
                 const isDay = h >= 6 && h <= 18;
-                const solarVal = isDay ? Math.sin((h - 6) / 12 * Math.PI) * 45 + 5 : 2;
-                const loadVal = isDay ? (h >= 10 && h <= 22 ? 35 + Math.random() * 20 : 15 + Math.random() * 10) : 10 + Math.random() * 8;
+                // 使用固定算法，无随机，保证曲线稳定
+                const solarVal = isDay ? Math.sin((h - 6) / 12 * Math.PI) * 40 + 10 : 2;
+                const loadVal = isDay ? (h >= 10 && h <= 22 ? 40 + Math.sin((h - 10) / 12 * Math.PI) * 15 : 20) : 12;
                 const battVal = solarVal > loadVal ? (solarVal - loadVal) * 0.5 : -(loadVal - solarVal) * 0.3;
                 const gridVal = solarVal - loadVal - battVal;
 
@@ -3666,6 +3668,17 @@
             document.getElementById('load-curve').setAttribute('d', smoothLine(loadPoints));
             document.getElementById('battery-curve').setAttribute('d', smoothLine(batteryPoints));
             document.getElementById('grid-curve').setAttribute('d', smoothLine(gridPoints));
+            document.getElementById('time-marker-line').setAttribute('x1', currentPos);
+            document.getElementById('time-marker-line').setAttribute('x2', currentPos);
+        }
+
+        // 每秒更新时间标记位置
+        function updateTimeMarker() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentSecond = now.getSeconds();
+            const currentPos = 40 + (currentHour * 3600 + currentMinute * 60 + currentSecond) / (24 * 3600) * 280;
             document.getElementById('time-marker-line').setAttribute('x1', currentPos);
             document.getElementById('time-marker-line').setAttribute('x2', currentPos);
         }
@@ -3817,7 +3830,7 @@
         initDateSelector();
         updateBreakdownData();
         drawPowerCurve();
-        setInterval(drawPowerCurve, 60000); // 每分钟更新曲线
+        setInterval(updateTimeMarker, 1000); // 每秒更新时间标记位置
     </script>
 </body>
 </html>
