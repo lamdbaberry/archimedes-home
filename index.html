@@ -1105,12 +1105,126 @@
         }
 
         .modal-content {
-            width: 300px;
+            width: 320px;
+            max-height: 520px;
+            overflow-y: auto;
             background: #1C1C1E;
             border-radius: 20px;
             padding: 20px;
             animation: modalSlide 0.3s ease;
         }
+
+        /* 扫描按钮 */
+        .scan-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(52,199,89,0.2), rgba(52,199,89,0.08));
+            border: 2px dashed rgba(52,199,89,0.4);
+            border-radius: 16px;
+            color: var(--green-primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .scan-btn:hover { background: linear-gradient(135deg, rgba(52,199,89,0.3), rgba(52,199,89,0.12)); }
+        .scan-btn.scanning { pointer-events: none; opacity: 0.7; }
+        .scan-radar {
+            width: 20px; height: 20px;
+            border: 2px solid var(--green-primary);
+            border-radius: 50%;
+            position: relative;
+        }
+        .scan-radar::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--green-primary);
+            animation: radarSpin 1s linear infinite;
+        }
+        @keyframes radarSpin { to { transform: rotate(360deg); } }
+
+        /* 发现设备列表 */
+        .discovered-section {
+            margin-top: 16px;
+        }
+        .discovered-section-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .discovered-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            margin-bottom: 6px;
+            transition: background 0.2s;
+        }
+        .discovered-item:hover { background: rgba(255,255,255,0.08); }
+        .discovered-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            width: 36px;
+            text-align: center;
+        }
+        .discovered-info { flex: 1; min-width: 0; }
+        .discovered-name {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .discovered-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .discovered-add {
+            padding: 6px 14px;
+            background: var(--green-primary);
+            color: #000;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            flex-shrink: 0;
+        }
+        .discovered-add.added {
+            background: rgba(255,255,255,0.15);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+        .divider-text {
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            margin: 12px 0;
+            position: relative;
+        }
+        .divider-text::before, .divider-text::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 35%;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+        .divider-text::before { left: 0; }
+        .divider-text::after { right: 0; }
 
         @keyframes modalSlide {
             from { transform: translateY(20px); opacity: 0; }
@@ -2962,26 +3076,52 @@
                             <span class="modal-close" onclick="closeAddDeviceModal()">✕</span>
                         </div>
                         <div class="modal-body">
-                            <div class="input-group">
-                                <label class="input-label">设备名称</label>
-                                <input type="text" class="input-field" id="device-name-input" placeholder="如：客厅空调">
+                            <!-- 扫描局域网按钮 -->
+                            <div class="scan-btn" id="scan-btn" onclick="startWifiScan()">
+                                <div class="scan-radar"></div>
+                                <span id="scan-text">扫描局域网设备</span>
                             </div>
-                            <div class="input-group">
-                                <label class="input-label">设备类型</label>
-                                <select class="input-field" id="device-type-select">
-                                    <option value="light">💡 灯具</option>
-                                    <option value="plug">🔌 智能插座</option>
-                                    <option value="ac">❄️ 空调</option>
-                                    <option value="sensor">🌡️ 传感器</option>
-                                    <option value="gateway">📶 网关</option>
-                                    <option value="other">📦 其他</option>
-                                </select>
+
+                            <!-- 发现设备列表 -->
+                            <div id="discovered-area" style="display:none;">
+                                <div class="discovered-section">
+                                    <div class="discovered-section-title">🏠 小米智能设备</div>
+                                    <div id="xiaomi-list"></div>
+                                </div>
+                                <div class="discovered-section">
+                                    <div class="discovered-section-title">📡 局域网设备</div>
+                                    <div id="lan-list"></div>
+                                </div>
                             </div>
-                            <div class="input-group">
-                                <label class="input-label">设备IP (可选)</label>
-                                <input type="text" class="input-field" id="device-ip-input" placeholder="192.168.1.xxx">
+
+                            <div class="divider-text" id="divider-text" style="display:none;">或手动添加</div>
+
+                            <!-- 手动添加表单 -->
+                            <div id="manual-form" style="display:none; margin-top: 8px;">
+                                <div class="input-group">
+                                    <label class="input-label">设备名称</label>
+                                    <input type="text" class="input-field" id="device-name-input" placeholder="如：客厅空调">
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">设备类型</label>
+                                    <select class="input-field" id="device-type-select">
+                                        <option value="light">💡 灯具</option>
+                                        <option value="plug">🔌 智能插座</option>
+                                        <option value="ac">❄️ 空调</option>
+                                        <option value="sensor">🌡️ 传感器</option>
+                                        <option value="gateway">📶 网关</option>
+                                        <option value="other">📦 其他</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">设备IP (可选)</label>
+                                    <input type="text" class="input-field" id="device-ip-input" placeholder="192.168.1.xxx">
+                                </div>
+                                <button class="submit-btn" onclick="addNewDevice()">确认添加</button>
                             </div>
-                            <button class="submit-btn" onclick="addNewDevice()">确认添加</button>
+                            <div style="text-align:center;margin-top:10px;">
+                                <span id="manual-toggle" style="color:var(--text-secondary);font-size:13px;cursor:pointer;display:none;" onclick="toggleManualForm()">手动添加设备 ›</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3609,66 +3749,193 @@
         // ===== 添加设备模态框 =====
         function showAddDeviceModal() {
             document.getElementById('add-device-modal').style.display = 'flex';
+            // 重置状态
+            document.getElementById('scan-btn').classList.remove('scanning');
+            document.getElementById('scan-text').textContent = '扫描局域网设备';
+            document.getElementById('discovered-area').style.display = 'none';
+            document.getElementById('manual-form').style.display = 'none';
+            document.getElementById('divider-text').style.display = 'none';
+            document.getElementById('manual-toggle').style.display = 'none';
         }
 
         function closeAddDeviceModal() {
             document.getElementById('add-device-modal').style.display = 'none';
         }
 
-        function addNewDevice() {
-            const name = document.getElementById('device-name-input').value;
-            const type = document.getElementById('device-type-select').value;
-            const ip = document.getElementById('device-ip-input').value;
+        // 模拟扫描局域网设备（含小米设备）
+        const simulatedDevices = [
+            { name: '小米智能灯 (客厅)', type: 'light', icon: '💡', ip: '192.168.1.101', brand: 'xiaomi' },
+            { name: '小米空调伴侣', type: 'ac', icon: '❄️', ip: '192.168.1.102', brand: 'xiaomi' },
+            { name: '小米智能插座', type: 'plug', icon: '🔌', ip: '192.168.1.103', brand: 'xiaomi' },
+            { name: '小米门窗传感器', type: 'sensor', icon: '🌡️', ip: '192.168.1.104', brand: 'xiaomi' },
+            { name: '小米网关2', type: 'gateway', icon: '📡', ip: '192.168.1.100', brand: 'xiaomi' },
+            { name: '客厅电视', type: 'other', icon: '📺', ip: '192.168.1.110', brand: 'lan' },
+            { name: '智能热水器', type: 'other', icon: '🔥', ip: '192.168.1.111', brand: 'lan' },
+            { name: 'NAS存储', type: 'other', icon: '💾', ip: '192.168.1.120', brand: 'lan' },
+            { name: '智能门锁', type: 'sensor', icon: '🔐', ip: '192.168.1.130', brand: 'lan' },
+            { name: '网络摄像头', type: 'other', icon: '📷', ip: '192.168.1.140', brand: 'lan' }
+        ];
 
-            if (!name) {
-                alert('请输入设备名称');
-                return;
-            }
+        function startWifiScan() {
+            const btn = document.getElementById('scan-btn');
+            const text = document.getElementById('scan-text');
+            const xiaomiList = document.getElementById('xiaomi-list');
+            const lanList = document.getElementById('lan-list');
 
-            // 设备图标映射
-            const icons = {
-                light: '💡',
-                plug: '🔌',
-                ac: '❄️',
-                sensor: '🌡️',
-                gateway: '📡',
-                other: '📦'
-            };
+            btn.classList.add('scanning');
+            text.textContent = '正在扫描局域网...';
 
-            // 创建新设备项
-            const deviceItem = document.createElement('div');
-            deviceItem.className = 'device-item';
-            deviceItem.innerHTML = `
-                <div class="device-info">
-                    <div class="device-icon active" style="background: linear-gradient(135deg, #34C759 0%, #30D158 100%);">
-                        <span style="font-size:28px;">${icons[type]}</span>
+            // 清空旧列表
+            xiaomiList.innerHTML = '';
+            lanList.innerHTML = '';
+            document.getElementById('discovered-area').style.display = 'none';
+            document.getElementById('divider-text').style.display = 'none';
+            document.getElementById('manual-toggle').style.display = 'none';
+            document.getElementById('manual-form').style.display = 'none';
+
+            // 模拟2秒扫描过程
+            setTimeout(() => {
+                // 随机选择6-8个设备（模拟每次扫描发现不同设备）
+                const shuffled = [...simulatedDevices].sort(() => Math.random() - 0.5);
+                const found = shuffled.slice(0, 6 + Math.floor(Math.random() * 3));
+
+                const xiaomiDevices = found.filter(d => d.brand === 'xiaomi');
+                const lanDevices = found.filter(d => d.brand === 'lan');
+
+                xiaomiDevices.forEach(d => {
+                    xiaomiList.innerHTML += `
+                        <div class="discovered-item">
+                            <div class="discovered-icon">${d.icon}</div>
+                            <div class="discovered-info">
+                                <div class="discovered-name">${d.name}</div>
+                                <div class="discovered-sub">IP: ${d.ip} · 待添加</div>
+                            </div>
+                            <button class="discovered-add" onclick="quickAddDevice('${d.name}', '${d.type}', '${d.ip}', this)">+ 添加</button>
+                        </div>`;
+                });
+
+                lanDevices.forEach(d => {
+                    lanList.innerHTML += `
+                        <div class="discovered-item">
+                            <div class="discovered-icon">${d.icon}</div>
+                            <div class="discovered-info">
+                                <div class="discovered-name">${d.name}</div>
+                                <div class="discovered-sub">IP: ${d.ip} · 待添加</div>
+                            </div>
+                            <button class="discovered-add" onclick="quickAddDevice('${d.name}', '${d.type}', '${d.ip}', this)">+ 添加</button>
+                        </div>`;
+                });
+
+                document.getElementById('discovered-area').style.display = 'block';
+                document.getElementById('divider-text').style.display = 'block';
+                document.getElementById('manual-toggle').style.display = 'inline';
+                btn.classList.remove('scanning');
+                text.textContent = `发现 ${found.length} 台设备，点击重新扫描`;
+            }, 2000);
+        }
+
+        function quickAddDevice(name, type, ip, btn) {
+            const icons = { light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡', other: '📦' };
+            const deviceCard = document.createElement('div');
+            deviceCard.className = 'device-card';
+            deviceCard.setAttribute('data-device', type);
+            deviceCard.innerHTML = `
+                <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                    <div class="device-card-left">
+                        <div class="device-card-icon active">${icons[type] || '📦'}</div>
+                        <div>
+                            <div class="device-card-name">${name}</div>
+                            <div class="device-card-detail">IP: ${ip} · 在线</div>
+                        </div>
                     </div>
-                    <div>
-                        <div class="device-name">${name}</div>
-                        <div class="device-status">${ip ? 'IP: ' + ip : '已添加'} · 在线</div>
+                    <button class="device-card-switch on" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
+                </div>
+                <div class="device-card-controls">
+                    <div class="device-ctrl-row">
+                        <div class="device-ctrl-label"><span>功率</span><span class="device-ctrl-value">${(Math.random() * 2 + 0.1).toFixed(1)} kW</span></div>
+                        <input class="device-range" type="range" min="0" max="100" value="${Math.floor(Math.random() * 60 + 20)}" oninput="this.previousElementSibling.querySelector('.device-ctrl-value').textContent = (this.value * 0.02).toFixed(1) + ' kW'">
                     </div>
-                </div>
-                <div class="device-toggle active" onclick="toggleDevice(this)">
-                    <div class="device-toggle-ball"></div>
-                </div>
-            `;
-
-            // 添加到设备列表
-            const deviceList = document.querySelector('.device-list');
-            deviceList.appendChild(deviceItem);
-
+                    <div class="device-ctrl-row">
+                        <div class="device-ctrl-label"><span>AI控制</span></div>
+                        <div class="device-choice">
+                            <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI节能')">AI节能</button>
+                            <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                        </div>
+                    </div>
+                </div>`;
+            document.getElementById('deviceList').appendChild(deviceCard);
+            // 标记为已添加
+            btn.textContent = '已添加';
+            btn.classList.add('added');
             // 更新设备统计
-            const statsEl = document.querySelector('.device-stats');
-            const currentCount = parseInt(statsEl.querySelector('strong').textContent);
-            statsEl.innerHTML = `<span>已连接 <strong style="color: var(--green-primary);">${currentCount + 1}</strong> 台设备</span><span>·</span><span>在线 <strong style="color: var(--green-light);">${currentCount + 1}</strong> 台</span>`;
+            updateDeviceCount();
+        }
 
-            // 清空输入并关闭模态框
+        function toggleManualForm() {
+            const form = document.getElementById('manual-form');
+            const toggle = document.getElementById('manual-toggle');
+            if (form.style.display === 'none' || !form.style.display) {
+                form.style.display = 'block';
+                toggle.textContent = '收起 ▲';
+            } else {
+                form.style.display = 'none';
+                toggle.textContent = '手动添加设备 ›';
+            }
+        }
+
+        function updateDeviceCount() {
+            const count = document.querySelectorAll('#deviceList .device-card').length + 5; // 5 = 初始设备数
+            const statsEl = document.querySelector('.device-stats');
+            if (statsEl) {
+                statsEl.innerHTML = `<span>已连接 <strong style="color: var(--green-primary);">${count}</strong> 台设备</span>
+                    <span>·</span>
+                    <span>在线 <strong style="color: var(--green-light);">${count - 1}</strong> 台</span>`;
+            }
+        }
+
+        function addNewDevice() {
+            const name = document.getElementById('device-name-input').value.trim();
+            const type = document.getElementById('device-type-select').value;
+            const ip = document.getElementById('device-ip-input').value.trim();
+
+            if (!name) { alert('请输入设备名称'); return; }
+
+            const icons = { light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡', other: '📦' };
+            const deviceCard = document.createElement('div');
+            deviceCard.className = 'device-card';
+            deviceCard.setAttribute('data-device', type);
+            deviceCard.innerHTML = `
+                <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                    <div class="device-card-left">
+                        <div class="device-card-icon active">${icons[type] || '📦'}</div>
+                        <div>
+                            <div class="device-card-name">${name}</div>
+                            <div class="device-card-detail">${ip ? 'IP: ' + ip : '手动添加'} · 在线</div>
+                        </div>
+                    </div>
+                    <button class="device-card-switch on" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
+                </div>
+                <div class="device-card-controls">
+                    <div class="device-ctrl-row">
+                        <div class="device-ctrl-label"><span>功率</span><span class="device-ctrl-value">0.5 kW</span></div>
+                        <input class="device-range" type="range" min="0" max="100" value="50" oninput="this.previousElementSibling.querySelector('.device-ctrl-value').textContent = (this.value * 0.02).toFixed(1) + ' kW'">
+                    </div>
+                    <div class="device-ctrl-row">
+                        <div class="device-ctrl-label"><span>AI控制</span></div>
+                        <div class="device-choice">
+                            <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI节能')">AI节能</button>
+                            <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                        </div>
+                    </div>
+                </div>`;
+            document.getElementById('deviceList').appendChild(deviceCard);
+            updateDeviceCount();
+
             document.getElementById('device-name-input').value = '';
             document.getElementById('device-ip-input').value = '';
+            document.getElementById('manual-form').style.display = 'none';
+            document.getElementById('manual-toggle').textContent = '手动添加设备 ›';
             closeAddDeviceModal();
-
-            // 显示成功提示
-            showModeStatus('✓ 设备 "' + name + '" 已成功添加');
         }
 
         // 显示状态提示
