@@ -3488,7 +3488,7 @@
                 <div class="modal-body">
                     <div class="input-group">
                         <span class="input-label">别墅名称</span>
-                        <input type="text" class="input-field" id="pi-villa-name" placeholder="如：东郊壹号">
+                        <input type="text" class="input-field" id="pi-villa-name" placeholder="如：东郊壹号" oninput="autoMatchVilla()">
                     </div>
                     <div class="input-group">
                         <span class="input-label">地址</span>
@@ -3889,6 +3889,39 @@
             document.getElementById('pi-phone').value = saved.phone || '';
             document.getElementById('pi-owner').value = saved.owner || '';
             modal.style.display = 'flex';
+        }
+
+        // 别墅名称→地址映射库
+        const villaAddressDB = {
+            '东郊壹号':   { address: '上海市浦东新区金桥路2888号', phone: '021-58998888' },
+            '合生东郊':   { address: '上海市浦东新区龙东大道588号', phone: '021-50336666' },
+            '汤臣一品':   { address: '上海市浦东新区花园石桥路28弄', phone: '021-58778888' },
+            '翠湖天地':   { address: '上海市黄浦区济南路260号', phone: '021-63868888' },
+            '佘山别墅':   { address: '上海市松江区佘北公路1688号', phone: '021-57652222' },
+            '紫园':       { address: '上海市松江区佘天昆公路268号', phone: '021-57698888' },
+            '九间堂':     { address: '上海市浦东新区芳甸路599弄', phone: '021-50338888' },
+            '绿城玫瑰园': { address: '上海市闵行区都会路3799号', phone: '021-64978888' },
+            '华侨城苏河湾': { address: '上海市静安区北苏州路912号', phone: '021-63238888' },
+            '古北壹号':   { address: '上海市闵行区红松东路1099号', phone: '021-54778888' }
+        };
+
+        // 别墅名称输入时自动匹配地址
+        function autoMatchVilla() {
+            const nameInput = document.getElementById('pi-villa-name');
+            const name = nameInput.value.trim();
+            const match = villaAddressDB[name];
+            if (match) {
+                document.getElementById('pi-address').value = match.address;
+                document.getElementById('pi-phone').value = match.phone;
+                // 短暂高亮提示
+                const addrInput = document.getElementById('pi-address');
+                addrInput.style.borderColor = 'var(--green-primary)';
+                addrInput.style.boxShadow = '0 0 0 3px rgba(52,199,89,0.15)';
+                setTimeout(() => {
+                    addrInput.style.borderColor = '';
+                    addrInput.style.boxShadow = '';
+                }, 1500);
+            }
         }
 
         function closePersonalInfoModal() {
