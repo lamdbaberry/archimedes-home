@@ -1168,6 +1168,38 @@
             border-color: var(--green-primary);
         }
 
+        /* 地址建议下拉 */
+        .suggest-dropdown {
+            display: none;
+            background: #1E1E1E;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            margin-top: 4px;
+            overflow: hidden;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        .suggest-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            transition: background 0.15s;
+        }
+        .suggest-item:last-child { border-bottom: none; }
+        .suggest-item:hover { background: rgba(52,199,89,0.1); }
+        .suggest-name {
+            display: block;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .suggest-addr {
+            display: block;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
         .submit-btn {
             padding: 14px;
             background: var(--green-primary);
@@ -3488,7 +3520,8 @@
                 <div class="modal-body">
                     <div class="input-group">
                         <span class="input-label">别墅名称</span>
-                        <input type="text" class="input-field" id="pi-villa-name" placeholder="如：东郊壹号" oninput="autoMatchVilla()">
+                        <input type="text" class="input-field" id="pi-villa-name" placeholder="输入小区名称搜索地址..." oninput="autoMatchVilla()" autocomplete="off">
+                            <div class="suggest-dropdown" id="villa-suggest-dropdown"></div>
                     </div>
                     <div class="input-group">
                         <span class="input-label">地址</span>
@@ -3891,35 +3924,83 @@
             modal.style.display = 'flex';
         }
 
-        // 别墅名称→地址映射库
+        // 本地别墅地址库（快速匹配，无需网络）
         const villaAddressDB = {
-            '东郊壹号':   '上海市浦东新区金桥路2888号',
-            '合生东郊':   '上海市浦东新区龙东大道588号',
-            '汤臣一品':   '上海市浦东新区花园石桥路28弄',
-            '翠湖天地':   '上海市黄浦区济南路260号',
-            '佘山别墅':   '上海市松江区佘北公路1688号',
-            '紫园':       '上海市松江区佘天昆公路268号',
-            '九间堂':     '上海市浦东新区芳甸路599弄',
-            '绿城玫瑰园': '上海市闵行区都会路3799号',
-            '华侨城苏河湾': '上海市静安区北苏州路912号',
-            '古北壹号':   '上海市闵行区红松东路1099号'
+            '东郊壹号': '上海市浦东新区金桥路2888号', '合生东郊': '上海市浦东新区龙东大道588号',
+            '汤臣一品': '上海市浦东新区花园石桥路28弄', '翠湖天地': '上海市黄浦区济南路260号',
+            '佘山别墅': '上海市松江区佘北公路1688号', '紫园': '上海市松江区佘天昆公路268号',
+            '九间堂': '上海市浦东新区芳甸路599弄', '绿城玫瑰园': '上海市闵行区都会路3799号',
+            '华侨城苏河湾': '上海市静安区北苏州路912号', '古北壹号': '上海市闵行区红松东路1099号'
         };
 
-        // 别墅名称输入时自动匹配地址
+        // 高德地图API Key
+        const AMAP_KEY = '7dbb78a2f8cc829f3bbde0c71b0839d4';
+
+        // 别墅名称输入时调用高德POI搜索
+        let suggestTimer = null;
         function autoMatchVilla() {
+            clearTimeout(suggestTimer);
             const name = document.getElementById('pi-villa-name').value.trim();
-            const addr = villaAddressDB[name];
-            if (addr) {
-                document.getElementById('pi-address').value = addr;
-                const addrInput = document.getElementById('pi-address');
-                addrInput.style.borderColor = 'var(--green-primary)';
-                addrInput.style.boxShadow = '0 0 0 3px rgba(52,199,89,0.15)';
-                setTimeout(() => {
-                    addrInput.style.borderColor = '';
-                    addrInput.style.boxShadow = '';
-                }, 1500);
+            const dropdown = document.getElementById('villa-suggest-dropdown');
+            if (!name || name.length < 2) {
+                dropdown.style.display = 'none';
+                return;
             }
+            // 本地库快速匹配
+            if (villaAddressDB[name]) {
+                document.getElementById('pi-address').value = villaAddressDB[name];
+                highlightAddrInput();
+                dropdown.style.display = 'none';
+                return;
+            }
+            // 防抖后调用高德API
+            suggestTimer = setTimeout(() => fetchAmapSuggest(name), 300);
         }
+
+        async function fetchAmapSuggest(keyword) {
+            const dropdown = document.getElementById('villa-suggest-dropdown');
+            try {
+                const url = `https://restapi.amap.com/v3/assistant/inputtips?key=${AMAP_KEY}&keywords=${encodeURIComponent(keyword)}&city=上海&citylimit=true&datatype=all`;
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data.status === '1' && data.tips && data.tips.length > 0) {
+                    const items = data.tips.filter(t => t.address && t.address.length > 0).slice(0, 6);
+                    if (items.length > 0) {
+                        dropdown.innerHTML = items.map(t =>
+                            `<div class="suggest-item" onclick="selectVillaSuggestion('${t.name.replace(/'/g, "\\'")}', '${(t.district||'') + t.address}')">
+                                <span class="suggest-name">${t.name}</span>
+                                <span class="suggest-addr">${(t.district||'')}${t.address}</span>
+                            </div>`
+                        ).join('');
+                        dropdown.style.display = 'block';
+                        return;
+                    }
+                }
+            } catch (e) { /* 网络异常静默 */ }
+            dropdown.style.display = 'none';
+        }
+
+        function selectVillaSuggestion(name, addr) {
+            document.getElementById('pi-villa-name').value = name;
+            document.getElementById('pi-address').value = addr;
+            document.getElementById('villa-suggest-dropdown').style.display = 'none';
+            highlightAddrInput();
+        }
+
+        function highlightAddrInput() {
+            const addrInput = document.getElementById('pi-address');
+            addrInput.style.borderColor = 'var(--green-primary)';
+            addrInput.style.boxShadow = '0 0 0 3px rgba(52,199,89,0.15)';
+            setTimeout(() => { addrInput.style.borderColor = ''; addrInput.style.boxShadow = ''; }, 1500);
+        }
+
+        // 点击弹窗空白处关闭下拉
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#pi-villa-name') && !e.target.closest('#villa-suggest-dropdown')) {
+                const d = document.getElementById('villa-suggest-dropdown');
+                if (d) d.style.display = 'none';
+            }
+        });
 
         function closePersonalInfoModal() {
             document.getElementById('personal-info-modal').style.display = 'none';
