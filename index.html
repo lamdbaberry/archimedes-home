@@ -109,6 +109,12 @@
             font-weight: 600;
             color: var(--text-primary);
             letter-spacing: 1px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .logo-text:hover {
+            color: var(--green-primary);
+        }
         }
 
         /* 别墅选择器 */
@@ -1954,6 +1960,45 @@
             transform-origin: right center;
         }
 
+        /* 当前模式指引 */
+        .current-mode-indicator {
+            background: linear-gradient(135deg, rgba(52,199,89,0.15), rgba(52,199,89,0.05));
+            border: 1px solid rgba(52,199,89,0.25);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .cm-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        .cm-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .cm-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .cm-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .cm-badge {
+            font-size: 11px;
+            color: var(--green-primary);
+            background: rgba(52,199,89,0.15);
+            border-radius: 20px;
+            padding: 4px 10px;
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
         /* 模式状态提示 */
         .mode-status {
             background: rgba(52, 199, 89, 0.1);
@@ -2565,8 +2610,8 @@
 
         <!-- Logo区域 -->
         <div class="logo-header">
-            <img class="logo-image" src="logo.jpg" alt="Logo">
-            <div class="logo-text">阿基米德之家</div>
+            <img class="logo-image" src="logo.jpg" alt="Logo" style="cursor:pointer" onclick="showPersonalInfoModal()">
+            <div class="logo-text" onclick="showPersonalInfoModal()">阿基米德之家</div>
             <div class="villa-selector">
                 <select id="villa-select" onchange="selectVilla(this.value)">
                     <option value="villa1">东郊壹号</option>
@@ -3265,6 +3310,16 @@
             <div class="page" id="page-schedule">
                 <div class="page-title">智能调度</div>
 
+                <!-- 当前模式指引 -->
+                <div class="current-mode-indicator" id="current-mode-indicator">
+                    <div class="cm-icon">🤖</div>
+                    <div class="cm-info">
+                        <div class="cm-name">当前模式：AI模式</div>
+                        <div class="cm-desc">AI智能调度，根据电价自动峰谷套利</div>
+                    </div>
+                    <div class="cm-badge">运行中</div>
+                </div>
+
                 <!-- 场景模式 -->
                 <div class="section-title">场景模式</div>
                 <div class="scene-grid">
@@ -3308,6 +3363,35 @@
                             <span class="modal-close" onclick="closeSceneModal()">✕</span>
                         </div>
                         <div class="modal-body" id="scene-modal-body"></div>
+                    </div>
+                </div>
+
+                <!-- 个人信息编辑弹窗 -->
+                <div class="modal-overlay" id="personal-info-modal" style="display:none;">
+                    <div class="stat-detail-content">
+                        <div class="modal-header">
+                            <span class="modal-title">个人信息</span>
+                            <span class="modal-close" onclick="closePersonalInfoModal()">✕</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group">
+                                <span class="input-label">别墅名称</span>
+                                <input type="text" class="input-field" id="pi-villa-name" placeholder="如：东郊壹号">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-label">地址</span>
+                                <input type="text" class="input-field" id="pi-address" placeholder="如：上海市浦东新区">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-label">联系电话</span>
+                                <input type="text" class="input-field" id="pi-phone" placeholder="如：138xxxx8888">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-label">户主姓名</span>
+                                <input type="text" class="input-field" id="pi-owner" placeholder="请输入姓名">
+                            </div>
+                            <button class="submit-btn" onclick="savePersonalInfo()">保存</button>
+                        </div>
                     </div>
                 </div>
 
@@ -3659,11 +3743,27 @@
             document.querySelectorAll('.scene-card').forEach(card => card.classList.remove('active'));
             const targetCard = document.querySelector(`.scene-card[data-mode="${mode}"]`);
             if (targetCard) targetCard.classList.add('active');
+            // 更新顶部模式指引
+            const modeData = {
+                ai:    { name: 'AI模式', desc: 'AI智能调度，根据电价自动峰谷套利', icon: '🤖' },
+                home:  { name: '在家模式', desc: '优先保证家庭用电舒适度，光伏充足时开启所有设备', icon: '🏠' },
+                away:  { name: '离家模式', desc: '离家时自动进入节能模式，减少不必要的能耗', icon: '🌙' },
+                backup:{ name: '备电保障', desc: '保留50%电量作为应急备用，保证突发断电时供电', icon: '🛡️' },
+                economy:{ name: '经济模式', desc: '最大化峰谷套利收益，在低谷储电、高峰放电', icon: '💰' },
+                custom:{ name: '自定义模式', desc: '自定义光伏分配策略和储能保底', icon: '⚙️' }
+            };
+            const md = modeData[mode] || modeData['ai'];
+            const indicator = document.getElementById('current-mode-indicator');
+            if (indicator) {
+                indicator.querySelector('.cm-icon').textContent = md.icon;
+                indicator.querySelector('.cm-name').textContent = '当前模式：' + md.name;
+                indicator.querySelector('.cm-desc').textContent = md.desc;
+            }
             // 显示状态提示
             const statusEl = document.getElementById('mode-status');
-            const modes = { ai: 'AI智能调度中', home: '在家模式运行中', away: '离家节能模式', backup: '备电保障已开启', economy: '经济模式运行中', custom: '自定义模式已生效' };
+            const statusLabels = { ai: 'AI智能调度中', home: '在家模式运行中', away: '离家节能模式', backup: '备电保障已开启', economy: '经济模式运行中', custom: '自定义模式已生效' };
             statusEl.style.display = 'block';
-            statusEl.querySelector('.mode-status-text').textContent = '✓ ' + (modes[mode] || '模式已切换');
+            statusEl.querySelector('.mode-status-text').textContent = '✓ ' + (statusLabels[mode] || '模式已切换');
             statusEl.style.background = 'rgba(52,199,89,0.15)';
             statusEl.style.borderColor = 'rgba(52,199,89,0.3)';
             setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
@@ -3778,6 +3878,70 @@
         function closeSceneModal() {
             document.getElementById('scene-modal').style.display = 'none';
         }
+
+        // ===== 个人信息弹窗 =====
+        function showPersonalInfoModal() {
+            const modal = document.getElementById('personal-info-modal');
+            // 从localStorage读取已保存的信息
+            const saved = JSON.parse(localStorage.getItem('archimedes_personal_info') || '{}');
+            document.getElementById('pi-villa-name').value = saved.villaName || '';
+            document.getElementById('pi-address').value = saved.address || '';
+            document.getElementById('pi-phone').value = saved.phone || '';
+            document.getElementById('pi-owner').value = saved.owner || '';
+            modal.style.display = 'flex';
+        }
+
+        function closePersonalInfoModal() {
+            document.getElementById('personal-info-modal').style.display = 'none';
+        }
+
+        function savePersonalInfo() {
+            const data = {
+                villaName: document.getElementById('pi-villa-name').value.trim(),
+                address: document.getElementById('pi-address').value.trim(),
+                phone: document.getElementById('pi-phone').value.trim(),
+                owner: document.getElementById('pi-owner').value.trim()
+            };
+            localStorage.setItem('archimedes_personal_info', JSON.stringify(data));
+            // 更新别墅选择器
+            if (data.villaName) {
+                const sel = document.getElementById('villa-select');
+                let found = false;
+                for (let i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].value === 'custom') {
+                        sel.options[i].text = data.villaName;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    const opt = document.createElement('option');
+                    opt.value = 'custom';
+                    opt.text = data.villaName;
+                    sel.appendChild(opt);
+                }
+                sel.value = 'custom';
+            }
+            // 更新logo文字
+            if (data.villaName) {
+                document.querySelector('.logo-text').textContent = data.villaName;
+            }
+            closePersonalInfoModal();
+        }
+
+        // 页面加载时恢复个人信息
+        (function initPersonalInfo() {
+            const saved = JSON.parse(localStorage.getItem('archimedes_personal_info') || '{}');
+            if (saved.villaName) {
+                document.querySelector('.logo-text').textContent = saved.villaName;
+                const sel = document.getElementById('villa-select');
+                const opt = document.createElement('option');
+                opt.value = 'custom';
+                opt.text = saved.villaName;
+                sel.appendChild(opt);
+                sel.value = 'custom';
+            }
+        })();
 
         // 更新SOC环形图
         function updateSOC(value, elementId = 'soc-progress') {
