@@ -1266,6 +1266,173 @@
             left: 22px;
         }
 
+        /* 展开式设备卡片 */
+        .device-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            margin-bottom: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .device-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+
+        .device-card-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .device-card-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            background: rgba(52, 199, 89, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--green-primary);
+        }
+
+        .device-card-icon.active {
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            color: #fff;
+        }
+
+        .device-card-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .device-card-detail {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .device-card-switch {
+            width: 50px;
+            height: 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.12);
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+        }
+
+        .device-card-switch.on {
+            background: var(--green-primary);
+        }
+
+        .device-card-switch::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 12px;
+            transition: left 0.3s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .device-card-switch.on::after {
+            left: 23px;
+        }
+
+        .device-card-controls {
+            display: none;
+            padding: 0 16px 16px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .device-card.open .device-card-controls {
+            display: block;
+        }
+
+        .device-ctrl-row {
+            margin-top: 14px;
+        }
+
+        .device-ctrl-row:first-child {
+            margin-top: 0;
+        }
+
+        .device-ctrl-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .device-ctrl-value {
+            color: var(--gold-accent);
+            font-weight: 500;
+        }
+
+        .device-range {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+        }
+
+        .device-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--green-primary);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4);
+        }
+
+        .device-choice {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .device-choice-btn {
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .device-choice-btn.active {
+            background: var(--green-primary);
+            border-color: transparent;
+            color: #0A0A0A;
+            font-weight: 600;
+        }
+
+        .device-expand-hint {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 12px;
+            text-align: center;
+        }
+
         /* 电池参数网格 */
         .battery-grid {
             display: grid;
@@ -2398,7 +2565,7 @@
 
         <!-- Logo区域 -->
         <div class="logo-header">
-            <img class="logo-image" src="https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-05-28%2FMiniMax-M2.7%2F2036064210860905206%2Febb397258ec23c806ca4420fbb67dd01660ff0922c7e730d7c37ea530ddcc05F.jpeg" alt="Logo">
+            <img class="logo-image" src="logo.jpg" alt="Logo">
             <div class="logo-text">阿基米德之家</div>
             <div class="villa-selector">
                 <select id="villa-select" onchange="selectVilla(this.value)">
@@ -2525,7 +2692,7 @@
                     <div class="stats-tab-content" id="stats-battery" style="display:none;">
                         <div class="stats-summary-row">
                             <div class="stats-summary-item">
-                                <div class="stats-summary-val green">156 kWh</div>
+                                <div class="stats-summary-val green">15.6 kWh</div>
                                 <div class="stats-summary-label">可用电量</div>
                             </div>
                             <div class="stats-summary-item">
@@ -2621,8 +2788,8 @@
                                 </linearGradient>
                             </defs>
                             <!-- Y轴标签 -->
-                            <text x="2" y="15" fill="rgba(255,255,255,0.6)" font-size="10">kW</text>
-                            <text x="2" y="38" fill="rgba(255,255,255,0.5)" font-size="10">50</text>
+                            <text x="2" y="15" fill="rgba(255,255,255,0.6)" font-size="10">50kW</text>
+                            <text x="2" y="38" fill="rgba(255,255,255,0.5)" font-size="10">38</text>
                             <text x="2" y="62" fill="rgba(255,255,255,0.5)" font-size="10">25</text>
                             <text x="2" y="87" fill="rgba(255,255,255,0.5)" font-size="10">0</text>
                             <!-- 背景网格 -->
@@ -2690,7 +2857,7 @@
                 </div>
             </div>
 
-            <!-- 设备管理 - 高级图标 + 添加设备 -->
+            <!-- 设备管理 - 展开式设备卡片 -->
             <div class="page" id="page-devices">
                 <div class="page-title">设备管理</div>
 
@@ -2743,75 +2910,237 @@
                     </div>
                 </div>
 
-                <div class="device-list">
-                    <div class="device-item">
-                        <div class="device-info">
-                            <div class="device-icon active">
-                                <span style="font-size:28px;">💡</span>
+                <!-- 设备列表 -->
+                <div id="deviceList">
+                    <!-- 客厅灯光 -->
+                    <div class="device-card" data-device="light">
+                        <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                            <div class="device-card-left">
+                                <div class="device-card-icon active">💡</div>
+                                <div>
+                                    <div class="device-card-name">客厅主灯</div>
+                                    <div class="device-card-detail">亮度 42% · 暖金色温</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="device-name">客厅主灯</div>
-                                <div class="device-status">功率: 15W · 在线</div>
-                            </div>
+                            <button class="device-card-switch on" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
                         </div>
-                        <div class="device-toggle active" onclick="toggleDevice(this)">
-                            <div class="device-toggle-ball"></div>
-                        </div>
-                    </div>
-                    <div class="device-item">
-                        <div class="device-info">
-                            <div class="device-icon active">
-                                <span style="font-size:28px;">🔌</span>
+                        <div class="device-card-controls">
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label">
+                                    <span>亮度</span>
+                                    <span class="device-ctrl-value" id="light-brightness-val">42%</span>
+                                </div>
+                                <input class="device-range" type="range" min="0" max="100" value="42" oninput="updateDeviceRange('light', 'brightness', this.value)">
                             </div>
-                            <div>
-                                <div class="device-name">智能插座</div>
-                                <div class="device-status">功率: 120W · 在线</div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>色温</span></div>
+                                <div class="device-choice" data-device="light" data-type="color">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '暖金')">暖金</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, '中性')">中性</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '清亮')">清亮</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="device-toggle active" onclick="toggleDevice(this)">
-                            <div class="device-toggle-ball"></div>
-                        </div>
-                    </div>
-                    <div class="device-item">
-                        <div class="device-info">
-                            <div class="device-icon">
-                                <span style="font-size:28px;">❄️</span>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>AI控制</span></div>
+                                <div class="device-choice" data-device="light" data-type="ai">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI节能')">AI节能</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, 'AI舒适')">AI舒适</button>
+                                </div>
                             </div>
-                            <div>
-                                <div class="device-name">空调</div>
-                                <div class="device-status">功率: 0W · 离线</div>
-                            </div>
-                        </div>
-                        <div class="device-toggle" onclick="toggleDevice(this)">
-                            <div class="device-toggle-ball"></div>
+                            <div class="device-expand-hint">点击上方卡片可收起</div>
                         </div>
                     </div>
-                    <div class="device-item">
-                        <div class="device-info">
-                            <div class="device-icon active">
-                                <span style="font-size:28px;">🌡️</span>
+
+                    <!-- 空调 -->
+                    <div class="device-card" data-device="ac">
+                        <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                            <div class="device-card-left">
+                                <div class="device-card-icon active">❄️</div>
+                                <div>
+                                    <div class="device-card-name">客厅空调</div>
+                                    <div class="device-card-detail">26°C · 舒适模式</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="device-name">温湿度传感器</div>
-                                <div class="device-status">26°C / 65% · 在线</div>
-                            </div>
+                            <button class="device-card-switch on" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
                         </div>
-                        <div class="device-toggle active" onclick="toggleDevice(this)">
-                            <div class="device-toggle-ball"></div>
+                        <div class="device-card-controls">
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label">
+                                    <span>目标温度</span>
+                                    <span class="device-ctrl-value" id="ac-temp-val">26°C</span>
+                                </div>
+                                <input class="device-range" type="range" min="18" max="30" value="26" oninput="updateDeviceRange('ac', 'temp', this.value)">
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>运行模式</span></div>
+                                <div class="device-choice" data-device="ac" data-type="mode">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '制冷')">制冷</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, '舒适')">舒适</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '节能')">节能</button>
+                                </div>
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>AI控制</span></div>
+                                <div class="device-choice" data-device="ac" data-type="ai">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, 'AI舒适')">AI舒适</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI低碳')">AI低碳</button>
+                                </div>
+                            </div>
+                            <div class="device-expand-hint">点击上方卡片可收起</div>
                         </div>
                     </div>
-                    <div class="device-item">
-                        <div class="device-info">
-                            <div class="device-icon active">
-                                <span style="font-size:28px;">📡</span>
+
+                    <!-- 智能插座 -->
+                    <div class="device-card" data-device="plug">
+                        <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                            <div class="device-card-left">
+                                <div class="device-card-icon active">🔌</div>
+                                <div>
+                                    <div class="device-card-name">智能插座</div>
+                                    <div class="device-card-detail">当前功率 120W · 在线</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="device-name">中央网关</div>
-                                <div class="device-status">已连接 · 3个子设备</div>
-                            </div>
+                            <button class="device-card-switch on" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
                         </div>
-                        <div class="device-toggle active" onclick="toggleDevice(this)">
-                            <div class="device-toggle-ball"></div>
+                        <div class="device-card-controls">
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label">
+                                    <span>功率限制</span>
+                                    <span class="device-ctrl-value" id="plug-power-val">1200W</span>
+                                </div>
+                                <input class="device-range" type="range" min="0" max="2200" value="1200" oninput="updateDeviceRange('plug', 'power', this.value)">
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>AI控制</span></div>
+                                <div class="device-choice" data-device="plug" data-type="ai">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI节能')">AI节能</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, 'AI定时')">AI定时</button>
+                                </div>
+                            </div>
+                            <div class="device-expand-hint">点击上方卡片可收起</div>
+                        </div>
+                    </div>
+
+                    <!-- 窗帘 -->
+                    <div class="device-card" data-device="curtain">
+                        <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                            <div class="device-card-left">
+                                <div class="device-card-icon">🪟</div>
+                                <div>
+                                    <div class="device-card-name">主卧窗帘</div>
+                                    <div class="device-card-detail">关闭 · 离线</div>
+                                </div>
+                            </div>
+                            <button class="device-card-switch" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
+                        </div>
+                        <div class="device-card-controls">
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label">
+                                    <span>开合度</span>
+                                    <span class="device-ctrl-value" id="curtain-open-val">0%</span>
+                                </div>
+                                <input class="device-range" type="range" min="0" max="100" value="0" oninput="updateDeviceRange('curtain', 'open', this.value)">
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>快捷动作</span></div>
+                                <div class="device-choice" data-device="curtain" data-type="action">
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, '全关')">全关</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '半开')">半开</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '全开')">全开</button>
+                                </div>
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>AI控制</span></div>
+                                <div class="device-choice" data-device="curtain" data-type="ai">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI晨光')">AI晨光</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, 'AI隐私')">AI隐私</button>
+                                </div>
+                            </div>
+                            <div class="device-expand-hint">点击上方卡片可收起</div>
+                        </div>
+                    </div>
+
+                    <!-- 地暖 -->
+                    <div class="device-card" data-device="floor">
+                        <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                            <div class="device-card-left">
+                                <div class="device-card-icon active">🔥</div>
+                                <div>
+                                    <div class="device-card-name">地暖系统</div>
+                                    <div class="device-card-detail">24°C · 均衡模式</div>
+                                </div>
+                            </div>
+                            <button class="device-card-switch on" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
+                        </div>
+                        <div class="device-card-controls">
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label">
+                                    <span>目标温度</span>
+                                    <span class="device-ctrl-value" id="floor-temp-val">24°C</span>
+                                </div>
+                                <input class="device-range" type="range" min="18" max="30" value="24" oninput="updateDeviceRange('floor', 'temp', this.value)">
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>供暖策略</span></div>
+                                <div class="device-choice" data-device="floor" data-type="mode">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '快速')">快速</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, '均衡')">均衡</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '节能')">节能</button>
+                                </div>
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>AI控制</span></div>
+                                <div class="device-choice" data-device="floor" data-type="ai">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, 'AI预热')">AI预热</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI节能')">AI节能</button>
+                                </div>
+                            </div>
+                            <div class="device-expand-hint">点击上方卡片可收起</div>
+                        </div>
+                    </div>
+
+                    <!-- 热水器 -->
+                    <div class="device-card" data-device="water">
+                        <div class="device-card-header" onclick="toggleDeviceCard(this)">
+                            <div class="device-card-left">
+                                <div class="device-card-icon active">🚿</div>
+                                <div>
+                                    <div class="device-card-name">热水系统</div>
+                                    <div class="device-card-detail">56°C · 循环待命</div>
+                                </div>
+                            </div>
+                            <button class="device-card-switch on" onclick="event.stopPropagation();toggleDeviceSwitch(this)"></button>
+                        </div>
+                        <div class="device-card-controls">
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label">
+                                    <span>水温设置</span>
+                                    <span class="device-ctrl-value" id="water-temp-val">56°C</span>
+                                </div>
+                                <input class="device-range" type="range" min="40" max="65" value="56" oninput="updateDeviceRange('water', 'temp', this.value)">
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>循环模式</span></div>
+                                <div class="device-choice" data-device="water" data-type="mode">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '关闭')">关闭</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, '待命')">待命</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '连续')">连续</button>
+                                </div>
+                            </div>
+                            <div class="device-ctrl-row">
+                                <div class="device-ctrl-label"><span>AI控制</span></div>
+                                <div class="device-choice" data-device="water" data-type="ai">
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, '手动')">手动</button>
+                                    <button class="device-choice-btn active" onclick="selectDeviceChoice(this, 'AI节能')">AI节能</button>
+                                    <button class="device-choice-btn" onclick="selectDeviceChoice(this, 'AI速热')">AI速热</button>
+                                </div>
+                            </div>
+                            <div class="device-expand-hint">点击上方卡片可收起</div>
                         </div>
                     </div>
                 </div>
@@ -3638,30 +3967,24 @@
                 const x = 40 + h / 24 * 280;
                 const isDay = h >= 6 && h <= 18;
                 // 使用固定算法，无随机，保证曲线稳定
+                // 缩放到Y轴有效范围，y=85是顶部(0kW)，y=15是底部(50kW)
                 const solarVal = isDay ? Math.sin((h - 6) / 12 * Math.PI) * 40 + 10 : 2;
                 const loadVal = isDay ? (h >= 10 && h <= 22 ? 40 + Math.sin((h - 10) / 12 * Math.PI) * 15 : 20) : 12;
                 const battVal = solarVal > loadVal ? (solarVal - loadVal) * 0.5 : -(loadVal - solarVal) * 0.3;
                 const gridVal = solarVal - loadVal - battVal;
 
-                solarPoints.push(`${x},${60 - solarVal}`);
-                loadPoints.push(`${x},${60 - loadVal}`);
-                batteryPoints.push(`${x},${50 - battVal * 0.5}`);
-                gridPoints.push(`${x},${50 - gridVal * 0.5}`);
+                // 限制在有效范围内
+                const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+                solarPoints.push(`${x},${clamp(85 - solarVal * 1.4, 15, 85)}`);
+                loadPoints.push(`${x},${clamp(85 - loadVal * 1.4, 15, 85)}`);
+                batteryPoints.push(`${x},${clamp(50 - battVal * 1.4, 15, 85)}`);
+                gridPoints.push(`${x},${clamp(50 - gridVal * 1.4, 15, 85)}`);
             }
 
-            // 使用平滑曲线(Cubic Bezier)替代折线
+            // 使用折线替代平滑曲线，确保显示正常
             const smoothLine = (points) => {
                 if (points.length < 2) return '';
-                let d = 'M ' + points[0];
-                for (let i = 1; i < points.length; i++) {
-                    const prev = points[i - 1].split(',');
-                    const curr = points[i].split(',');
-                    const cpx = (parseFloat(prev[0]) + parseFloat(curr[0])) / 2;
-                    d += ' Q ' + prev[0] + ',' + prev[1] + ' ' + cpx + ',' + (parseFloat(prev[1]) + parseFloat(curr[1])) / 2;
-                }
-                const last = points[points.length - 1].split(',');
-                d += ' T ' + last[0] + ',' + last[1];
-                return d;
+                return 'M ' + points.join(' L ');
             };
 
             document.getElementById('solar-curve').setAttribute('d', smoothLine(solarPoints));
@@ -3826,7 +4149,54 @@
             `;
         }
 
+        // ===== 设备控制函数 =====
+        function toggleDeviceCard(header) {
+            header.closest('.device-card').classList.toggle('open');
+        }
+
+        function toggleDeviceSwitch(btn) {
+            btn.classList.toggle('on');
+            const card = btn.closest('.device-card');
+            const icon = card.querySelector('.device-card-icon');
+            if (btn.classList.contains('on')) {
+                icon.classList.add('active');
+            } else {
+                icon.classList.remove('active');
+            }
+        }
+
+        function updateDeviceRange(device, type, value) {
+            const el = document.getElementById(device + '-' + type + '-val');
+            const rangeInput = el ? el.closest('.device-ctrl-row').querySelector('.device-range') : null;
+            if (el) {
+                let suffix = '%';
+                if (type === 'temp') suffix = '°C';
+                else if (type === 'power') suffix = 'W';
+                else if (type === 'open') suffix = '%';
+                el.textContent = value + suffix;
+            }
+            if (rangeInput) {
+                const percent = (value - rangeInput.min) / (rangeInput.max - rangeInput.min) * 100;
+                rangeInput.style.background = `linear-gradient(to right, var(--green-primary) 0%, var(--green-primary) ${percent}%, rgba(255,255,255,0.1) ${percent}%, rgba(255,255,255,0.1) 100%)`;
+            }
+        }
+
+        function selectDeviceChoice(btn, value) {
+            const group = btn.closest('.device-choice');
+            group.querySelectorAll('.device-choice-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // 初始化滑动条背景
+        function initSliderBackgrounds() {
+            document.querySelectorAll('.device-range').forEach(function(range) {
+                const percent = (range.value - range.min) / (range.max - range.min) * 100;
+                range.style.background = `linear-gradient(to right, var(--green-primary) 0%, var(--green-primary) ${percent}%, rgba(255,255,255,0.1) ${percent}%, rgba(255,255,255,0.1) 100%)`;
+            });
+        }
+
         // 初始化
+        initSliderBackgrounds();
         initDateSelector();
         updateBreakdownData();
         drawPowerCurve();
