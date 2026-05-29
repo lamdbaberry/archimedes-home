@@ -1225,6 +1225,15 @@
         }
         .divider-text::before { left: 0; }
         .divider-text::after { right: 0; }
+        .scan-hint {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+        }
+        .scan-hint code {
+            font-family: 'SF Mono', 'Consolas', monospace;
+        }
 
         @keyframes modalSlide {
             from { transform: translateY(20px); opacity: 0; }
@@ -3762,19 +3771,14 @@
             document.getElementById('add-device-modal').style.display = 'none';
         }
 
-        // 模拟扫描局域网设备（含小米设备）
-        const simulatedDevices = [
-            { name: '小米智能灯 (客厅)', type: 'light', icon: '💡', ip: '192.168.1.101', brand: 'xiaomi' },
-            { name: '小米空调伴侣', type: 'ac', icon: '❄️', ip: '192.168.1.102', brand: 'xiaomi' },
-            { name: '小米智能插座', type: 'plug', icon: '🔌', ip: '192.168.1.103', brand: 'xiaomi' },
-            { name: '小米门窗传感器', type: 'sensor', icon: '🌡️', ip: '192.168.1.104', brand: 'xiaomi' },
-            { name: '小米网关2', type: 'gateway', icon: '📡', ip: '192.168.1.100', brand: 'xiaomi' },
-            { name: '客厅电视', type: 'other', icon: '📺', ip: '192.168.1.110', brand: 'lan' },
-            { name: '智能热水器', type: 'other', icon: '🔥', ip: '192.168.1.111', brand: 'lan' },
-            { name: 'NAS存储', type: 'other', icon: '💾', ip: '192.168.1.120', brand: 'lan' },
-            { name: '智能门锁', type: 'sensor', icon: '🔐', ip: '192.168.1.130', brand: 'lan' },
-            { name: '网络摄像头', type: 'other', icon: '📷', ip: '192.168.1.140', brand: 'lan' }
-        ];
+        // 设备类型→图标映射
+        const deviceIconMap = {
+            light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡',
+            other: '📦', xiaomi: '🏠', lan: '📡', camera: '📷', tv: '📺',
+            nas: '💾', ha: '🏠', apple: '🍎', iot: '🔧', mdns: '🔍'
+        };
+
+        const SCAN_SERVER_URL = 'http://localhost:8765';
 
         function startWifiScan() {
             const btn = document.getElementById('scan-btn');
@@ -3784,8 +3788,6 @@
 
             btn.classList.add('scanning');
             text.textContent = '正在扫描局域网...';
-
-            // 清空旧列表
             xiaomiList.innerHTML = '';
             lanList.innerHTML = '';
             document.getElementById('discovered-area').style.display = 'none';
@@ -3793,45 +3795,102 @@
             document.getElementById('manual-toggle').style.display = 'none';
             document.getElementById('manual-form').style.display = 'none';
 
-            // 模拟2秒扫描过程
-            setTimeout(() => {
-                // 随机选择6-8个设备（模拟每次扫描发现不同设备）
-                const shuffled = [...simulatedDevices].sort(() => Math.random() - 0.5);
-                const found = shuffled.slice(0, 6 + Math.floor(Math.random() * 3));
-
-                const xiaomiDevices = found.filter(d => d.brand === 'xiaomi');
-                const lanDevices = found.filter(d => d.brand === 'lan');
-
-                xiaomiDevices.forEach(d => {
-                    xiaomiList.innerHTML += `
-                        <div class="discovered-item">
-                            <div class="discovered-icon">${d.icon}</div>
-                            <div class="discovered-info">
-                                <div class="discovered-name">${d.name}</div>
-                                <div class="discovered-sub">IP: ${d.ip} · 待添加</div>
-                            </div>
-                            <button class="discovered-add" onclick="quickAddDevice('${d.name}', '${d.type}', '${d.ip}', this)">+ 添加</button>
-                        </div>`;
+            // 先检查扫描服务是否在线
+            fetch(`${SCAN_SERVER_URL}/health`)
+                .then(r => r.json())
+                .then(() => {
+                    // 服务在线，执行真实扫描
+                    return fetch(`${SCAN_SERVER_URL}/api/scan/lan`);
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.devices) {
+                        renderDiscoveredDevices(data.devices);
+                        btn.classList.remove('scanning');
+                        text.textContent = `发现 ${data.devices.length} 台设备，点击重新扫描`;
+                    } else {
+                        throw new Error('no devices');
+                    }
+                })
+                .catch(() => {
+                    // 扫描服务未运行，显示提示
+                    xiaomiList.innerHTML = `<div class="scan-hint">
+                        <div style="font-size:40px;margin-bottom:12px;">🖥️</div>
+                        <div style="font-size:14px;color:var(--text-primary);margin-bottom:8px;">需要启动本地扫描服务</div>
+                        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">在项目目录下运行以下命令：</div>
+                        <code style="display:block;background:#0a0a0a;padding:10px;border-radius:8px;font-size:12px;color:#34C759;word-break:break-all;">cd backend<br>python scan_server.py</code>
+                        <div style="font-size:11px;color:var(--text-tertiary);margin-top:10px;">启动后点击"重新扫描"即可发现真实设备</div>
+                    </div>`;
+                    document.getElementById('discovered-area').style.display = 'block';
+                    document.getElementById('divider-text').style.display = 'block';
+                    document.getElementById('manual-toggle').style.display = 'inline';
+                    btn.classList.remove('scanning');
+                    text.textContent = '扫描服务未连接，点击重试';
                 });
+        }
 
-                lanDevices.forEach(d => {
-                    lanList.innerHTML += `
-                        <div class="discovered-item">
-                            <div class="discovered-icon">${d.icon}</div>
-                            <div class="discovered-info">
-                                <div class="discovered-name">${d.name}</div>
-                                <div class="discovered-sub">IP: ${d.ip} · 待添加</div>
-                            </div>
-                            <button class="discovered-add" onclick="quickAddDevice('${d.name}', '${d.type}', '${d.ip}', this)">+ 添加</button>
-                        </div>`;
-                });
+        function renderDiscoveredDevices(devices) {
+            const xiaomiList = document.getElementById('xiaomi-list');
+            const lanList = document.getElementById('lan-list');
 
-                document.getElementById('discovered-area').style.display = 'block';
-                document.getElementById('divider-text').style.display = 'block';
-                document.getElementById('manual-toggle').style.display = 'inline';
-                btn.classList.remove('scanning');
-                text.textContent = `发现 ${found.length} 台设备，点击重新扫描`;
-            }, 2000);
+            const xiaomiDevices = devices.filter(d => d.brand === 'xiaomi');
+            const otherDevices = devices.filter(d => d.brand !== 'xiaomi');
+
+            if (xiaomiDevices.length === 0) {
+                xiaomiList.innerHTML = '<div style="font-size:12px;color:var(--text-tertiary);padding:8px;">未发现小米设备（请确保设备在同一WiFi下）</div>';
+            }
+            xiaomiDevices.forEach(d => {
+                const type = mapDeviceType(d);
+                xiaomiList.innerHTML += `
+                    <div class="discovered-item">
+                        <div class="discovered-icon">${deviceIconMap[type] || '📦'}</div>
+                        <div class="discovered-info">
+                            <div class="discovered-name">${escapeHtml(d.name)}</div>
+                            <div class="discovered-sub">IP: ${d.ip} · ${d.device_id ? 'ID:' + d.device_id.slice(0,8) : '待添加'}</div>
+                        </div>
+                        <button class="discovered-add" onclick="quickAddDevice('${escapeHtml(d.name).replace(/'/g, "\\'")}', '${type}', '${d.ip}', this)">+ 添加</button>
+                    </div>`;
+            });
+
+            if (otherDevices.length === 0) {
+                lanList.innerHTML = '<div style="font-size:12px;color:var(--text-tertiary);padding:8px;">未发现其他网络设备</div>';
+            }
+            otherDevices.forEach(d => {
+                const type = mapDeviceType(d);
+                lanList.innerHTML += `
+                    <div class="discovered-item">
+                        <div class="discovered-icon">${deviceIconMap[type] || '📦'}</div>
+                        <div class="discovered-info">
+                            <div class="discovered-name">${escapeHtml(d.name)}</div>
+                            <div class="discovered-sub">IP: ${d.ip}${d.port ? ' · 端口:' + d.port : ''} · 待添加</div>
+                        </div>
+                        <button class="discovered-add" onclick="quickAddDevice('${escapeHtml(d.name).replace(/'/g, "\\'")}', '${type}', '${d.ip}', this)">+ 添加</button>
+                    </div>`;
+            });
+
+            document.getElementById('discovered-area').style.display = 'block';
+            document.getElementById('divider-text').style.display = 'block';
+            document.getElementById('manual-toggle').style.display = 'inline';
+        }
+
+        function mapDeviceType(device) {
+            const brand = device.brand || '';
+            const name = (device.name || '').toLowerCase();
+            if (name.includes('灯') || name.includes('light')) return 'light';
+            if (name.includes('插座') || name.includes('plug') || name.includes('socket')) return 'plug';
+            if (name.includes('空调') || name.includes('ac')) return 'ac';
+            if (name.includes('传感') || name.includes('sensor') || name.includes('温湿')) return 'sensor';
+            if (name.includes('网关') || name.includes('gateway') || name.includes('路由')) return 'gateway';
+            if (name.includes('摄像') || name.includes('camera') || brand === 'camera') return 'camera';
+            if (name.includes('电视') || name.includes('tv') || brand === 'tv') return 'tv';
+            if (brand === 'nas' || name.includes('nas')) return 'nas';
+            return 'other';
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
         function quickAddDevice(name, type, ip, btn) {
