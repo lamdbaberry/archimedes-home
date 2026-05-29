@@ -3366,35 +3366,6 @@
                     </div>
                 </div>
 
-                <!-- 个人信息编辑弹窗 -->
-                <div class="modal-overlay" id="personal-info-modal" style="display:none;">
-                    <div class="stat-detail-content">
-                        <div class="modal-header">
-                            <span class="modal-title">个人信息</span>
-                            <span class="modal-close" onclick="closePersonalInfoModal()">✕</span>
-                        </div>
-                        <div class="modal-body">
-                            <div class="input-group">
-                                <span class="input-label">别墅名称</span>
-                                <input type="text" class="input-field" id="pi-villa-name" placeholder="如：东郊壹号">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-label">地址</span>
-                                <input type="text" class="input-field" id="pi-address" placeholder="如：上海市浦东新区">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-label">联系电话</span>
-                                <input type="text" class="input-field" id="pi-phone" placeholder="如：138xxxx8888">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-label">户主姓名</span>
-                                <input type="text" class="input-field" id="pi-owner" placeholder="请输入姓名">
-                            </div>
-                            <button class="submit-btn" onclick="savePersonalInfo()">保存</button>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="divider"></div>
 
                 <!-- 智能调度 -->
@@ -3503,6 +3474,35 @@
                         <div class="settings-subtitle">阿基米德之家 v1.0</div>
                     </div>
                     <div class="settings-arrow">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人信息编辑弹窗 -->
+        <div class="modal-overlay" id="personal-info-modal" style="display:none;">
+            <div class="stat-detail-content">
+                <div class="modal-header">
+                    <span class="modal-title">个人信息</span>
+                    <span class="modal-close" onclick="closePersonalInfoModal()">✕</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-label">别墅名称</span>
+                        <input type="text" class="input-field" id="pi-villa-name" placeholder="如：东郊壹号">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-label">地址</span>
+                        <input type="text" class="input-field" id="pi-address" placeholder="如：上海市浦东新区">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-label">联系电话</span>
+                        <input type="text" class="input-field" id="pi-phone" placeholder="如：138xxxx8888">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-label">户主姓名</span>
+                        <input type="text" class="input-field" id="pi-owner" placeholder="请输入姓名">
+                    </div>
+                    <button class="submit-btn" onclick="savePersonalInfo()">保存</button>
                 </div>
             </div>
         </div>
