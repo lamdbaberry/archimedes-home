@@ -4286,7 +4286,7 @@
         async function fetchAmapSuggest(keyword) {
             const dropdown = document.getElementById('villa-suggest-dropdown');
             try {
-                const url = `https://restapi.amap.com/v3/assistant/inputtips?key=${AMAP_KEY}&keywords=${encodeURIComponent(keyword)}&city=上海&citylimit=true&datatype=all`;
+                const url = `https://restapi.amap.com/v3/assistant/inputtips?key=${AMAP_KEY}&keywords=${encodeURIComponent(keyword)}&citylimit=false&datatype=all`;
                 const res = await fetch(url);
                 const data = await res.json();
                 if (data.status === '1' && data.tips && data.tips.length > 0) {
