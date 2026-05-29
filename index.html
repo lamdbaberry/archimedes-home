@@ -3268,32 +3268,32 @@
                 <!-- 场景模式 -->
                 <div class="section-title">场景模式</div>
                 <div class="scene-grid">
-                    <div class="scene-card ai-scene" onclick="showSceneModal('ai')">
+                    <div class="scene-card ai-scene active" data-mode="ai" onclick="showSceneModal('ai')">
                         <div class="scene-card-icon">🤖</div>
                         <div class="scene-card-name">AI模式</div>
                         <div class="scene-card-desc">智能调度</div>
                     </div>
-                    <div class="scene-card" onclick="showSceneModal('home')">
+                    <div class="scene-card" data-mode="home" onclick="showSceneModal('home')">
                         <div class="scene-card-icon">🏠</div>
                         <div class="scene-card-name">在家模式</div>
                         <div class="scene-card-desc">舒适优先</div>
                     </div>
-                    <div class="scene-card" onclick="showSceneModal('away')">
+                    <div class="scene-card" data-mode="away" onclick="showSceneModal('away')">
                         <div class="scene-card-icon">🌙</div>
                         <div class="scene-card-name">离家模式</div>
                         <div class="scene-card-desc">节能优先</div>
                     </div>
-                    <div class="scene-card" onclick="showSceneModal('backup')">
+                    <div class="scene-card" data-mode="backup" onclick="showSceneModal('backup')">
                         <div class="scene-card-icon">🛡️</div>
                         <div class="scene-card-name">备电保障</div>
                         <div class="scene-card-desc">预留50%应急</div>
                     </div>
-                    <div class="scene-card" onclick="showSceneModal('economy')">
+                    <div class="scene-card" data-mode="economy" onclick="showSceneModal('economy')">
                         <div class="scene-card-icon">💰</div>
                         <div class="scene-card-name">经济模式</div>
                         <div class="scene-card-desc">最大化套利</div>
                     </div>
-                    <div class="scene-card" onclick="showSceneModal('custom')">
+                    <div class="scene-card" data-mode="custom" onclick="showSceneModal('custom')">
                         <div class="scene-card-icon">⚙️</div>
                         <div class="scene-card-name">自定义</div>
                         <div class="scene-card-desc">DIY设置</div>
@@ -3649,6 +3649,27 @@
             }, 3000);
         }
 
+        // 当前激活的场景模式
+        let currentSceneMode = 'ai';
+
+        // 激活场景模式
+        function activateSceneMode(mode) {
+            currentSceneMode = mode;
+            // 高亮对应卡片
+            document.querySelectorAll('.scene-card').forEach(card => card.classList.remove('active'));
+            const targetCard = document.querySelector(`.scene-card[data-mode="${mode}"]`);
+            if (targetCard) targetCard.classList.add('active');
+            // 显示状态提示
+            const statusEl = document.getElementById('mode-status');
+            const modes = { ai: 'AI智能调度中', home: '在家模式运行中', away: '离家节能模式', backup: '备电保障已开启', economy: '经济模式运行中', custom: '自定义模式已生效' };
+            statusEl.style.display = 'block';
+            statusEl.querySelector('.mode-status-text').textContent = '✓ ' + (modes[mode] || '模式已切换');
+            statusEl.style.background = 'rgba(52,199,89,0.15)';
+            statusEl.style.borderColor = 'rgba(52,199,89,0.3)';
+            setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+            closeSceneModal();
+        }
+
         // 场景模式弹窗
         function showSceneModal(mode) {
             const modal = document.getElementById('scene-modal');
@@ -3712,7 +3733,7 @@
                             <option value="50">50%</option>
                         </select>
                     </div>
-                    <button class="submit-btn" onclick="closeSceneModal()">保存设置</button>
+                    <button class="submit-btn" onclick="activateSceneMode('custom')">保存设置</button>
                 `;
             } else if (mode === 'backup') {
                 content += `
@@ -3725,7 +3746,7 @@
                             <option value="60">60%</option>
                         </select>
                     </div>
-                    <button class="submit-btn" onclick="closeSceneModal()">保存设置</button>
+                    <button class="submit-btn" onclick="activateSceneMode('backup')">保存设置</button>
                 `;
             } else if (mode === 'economy') {
                 content += `
@@ -3744,10 +3765,10 @@
                             <option value="0.8" selected>¥0.82/kWh</option>
                         </select>
                     </div>
-                    <button class="submit-btn" onclick="closeSceneModal()">保存设置</button>
+                    <button class="submit-btn" onclick="activateSceneMode('economy')">保存设置</button>
                 `;
             } else {
-                content += `<button class="submit-btn" onclick="closeSceneModal()">确定</button>`;
+                content += `<button class="submit-btn" onclick="activateSceneMode('${mode}')">确定</button>`;
             }
 
             body.innerHTML = content;
