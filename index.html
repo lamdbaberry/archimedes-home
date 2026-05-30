@@ -2765,7 +2765,7 @@
 
         <!-- Logo区域 -->
         <div class="logo-header">
-            <img class="logo-image" src="logo.jpg" alt="Logo" style="cursor:pointer" onclick="showPersonalInfoModal()">
+            <img class="logo-image" src="logo.png" alt="Logo" style="cursor:pointer" onclick="showPersonalInfoModal()">
             <div class="logo-text" onclick="showPersonalInfoModal()">阿基米德之家</div>
             <div class="villa-selector">
                 <select id="villa-select" onchange="selectVilla(this.value)">
@@ -2978,12 +2978,12 @@
                         <svg viewBox="0 0 340 100" preserveAspectRatio="none" id="curve-svg">
                             <defs>
                                 <linearGradient id="solarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#FF9500;stop-opacity:0.3"/>
-                                    <stop offset="100%" style="stop-color:#FF9500;stop-opacity:0"/>
+                                    <stop offset="0%" style="stop-color:#FFD60A;stop-opacity:0.3"/>
+                                    <stop offset="100%" style="stop-color:#FFD60A;stop-opacity:0"/>
                                 </linearGradient>
                                 <linearGradient id="loadGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#34C759;stop-opacity:0.3"/>
-                                    <stop offset="100%" style="stop-color:#34C759;stop-opacity:0"/>
+                                    <stop offset="0%" style="stop-color:#FF453A;stop-opacity:0.3"/>
+                                    <stop offset="100%" style="stop-color:#FF453A;stop-opacity:0"/>
                                 </linearGradient>
                             </defs>
                             <!-- Y轴标签 -->
@@ -2999,13 +2999,13 @@
                             <!-- Y轴线 -->
                             <line x1="40" y1="5" x2="40" y2="95" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
                             <!-- 光伏曲线 (白天高，晚上低) -->
-                            <path id="solar-curve" d="" fill="none" stroke="#FF9500" stroke-width="2"/>
+                            <path id="solar-curve" d="" fill="none" stroke="#FFD60A" stroke-width="2.5"/>
                             <!-- 家庭用电曲线 -->
-                            <path id="load-curve" d="" fill="none" stroke="#34C759" stroke-width="2"/>
+                            <path id="load-curve" d="" fill="none" stroke="#FF453A" stroke-width="2.5"/>
                             <!-- 电池状态曲线 (正=充，负=放) -->
-                            <path id="battery-curve" d="" fill="none" stroke="#5DD87B" stroke-width="2" stroke-dasharray="4 2"/>
+                            <path id="battery-curve" d="" fill="none" stroke="#34C759" stroke-width="2.5" stroke-dasharray="5 3"/>
                             <!-- 电网状态曲线 (正=卖，负=买) -->
-                            <path id="grid-curve" d="" fill="none" stroke="#FFCC00" stroke-width="2"/>
+                            <path id="grid-curve" d="" fill="none" stroke="#5AC8FA" stroke-width="2"/>
                             <!-- 时间标记线 -->
                             <line id="time-marker-line" x1="150" y1="5" x2="150" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
                         </svg>
@@ -3014,10 +3014,10 @@
                         <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
                     </div>
                     <div class="curve-legend">
-                        <span class="legend-item"><span class="legend-color" style="background:#FF9500"></span>光伏</span>
-                        <span class="legend-item"><span class="legend-color" style="background:#34C759"></span>家庭</span>
-                        <span class="legend-item"><span class="legend-color" style="background:#5DD87B;opacity:0.7"></span>电池</span>
-                        <span class="legend-item"><span class="legend-color" style="background:#FFCC00"></span>电网</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#FFD60A"></span>光伏</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#FF453A"></span>家庭</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#34C759"></span>电池</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#5AC8FA"></span>电网</span>
                     </div>
                 </div>
 
@@ -3119,6 +3119,7 @@
                                         <option value="ac">❄️ 空调</option>
                                         <option value="sensor">🌡️ 传感器</option>
                                         <option value="gateway">📶 网关</option>
+                                        <option value="charger">⚡ 充电桩</option>
                                         <option value="other">📦 其他</option>
                                     </select>
                                 </div>
@@ -3775,7 +3776,7 @@
         const deviceIconMap = {
             light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡',
             other: '📦', xiaomi: '🏠', lan: '📡', camera: '📷', tv: '📺',
-            nas: '💾', ha: '🏠', apple: '🍎', iot: '🔧', mdns: '🔍'
+            nas: '💾', ha: '🏠', apple: '🍎', iot: '🔧', mdns: '🔍', charger: '⚡'
         };
 
         const SCAN_SERVER_URL = 'http://localhost:8765';
@@ -3884,6 +3885,7 @@
             if (name.includes('摄像') || name.includes('camera') || brand === 'camera') return 'camera';
             if (name.includes('电视') || name.includes('tv') || brand === 'tv') return 'tv';
             if (brand === 'nas' || name.includes('nas')) return 'nas';
+            if (name.includes('充电') || name.includes('charger') || name.includes('桩')) return 'charger';
             return 'other';
         }
 
@@ -3894,7 +3896,7 @@
         }
 
         function quickAddDevice(name, type, ip, btn) {
-            const icons = { light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡', other: '📦' };
+            const icons = { light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡', other: '📦', charger: '⚡' };
             const deviceCard = document.createElement('div');
             deviceCard.className = 'device-card';
             deviceCard.setAttribute('data-device', type);
@@ -3959,7 +3961,7 @@
 
             if (!name) { alert('请输入设备名称'); return; }
 
-            const icons = { light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡', other: '📦' };
+            const icons = { light: '💡', plug: '🔌', ac: '❄️', sensor: '🌡️', gateway: '📡', other: '📦', charger: '⚡' };
             const deviceCard = document.createElement('div');
             deviceCard.className = 'device-card';
             deviceCard.setAttribute('data-device', type);
