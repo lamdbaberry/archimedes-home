@@ -58,7 +58,7 @@
                 0 0 0 10px #e8e8ec,
                 0 0 0 12px #dcdce0,
                 0 40px 80px rgba(0,0,0,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.8);
+                inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
         /* 顶部刘海 */
@@ -126,15 +126,15 @@
             align-items: center;
             gap: 6px;
             padding: 6px 12px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.07);
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .villa-selector:hover {
-            background: rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.07);
             border-color: var(--green-primary);
         }
 
@@ -150,7 +150,7 @@
         }
 
         .villa-selector select option {
-            background: #1C1C1E;
+            background: #ffffff;
             color: var(--text-primary);
         }
 
@@ -352,7 +352,7 @@
         }
 
         .flow-icon.grid {
-            background: rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.07);
         }
 
         .flow-info {
@@ -378,8 +378,8 @@
         .flow-arrow-down {
             width: 12px;
             height: 12px;
-            border-left: 2px solid rgba(255,255,255,0.2);
-            border-bottom: 2px solid rgba(255,255,255,0.2);
+            border-left: 2px solid rgba(0,0,0,0.12);
+            border-bottom: 2px solid rgba(0,0,0,0.12);
             transform: rotate(-45deg);
             margin-top: 4px;
         }
@@ -392,8 +392,8 @@
         .flow-arrow-up {
             width: 12px;
             height: 12px;
-            border-left: 2px solid rgba(255,255,255,0.2);
-            border-top: 2px solid rgba(255,255,255,0.2);
+            border-left: 2px solid rgba(0,0,0,0.12);
+            border-top: 2px solid rgba(0,0,0,0.12);
             transform: rotate(45deg);
         }
 
@@ -501,7 +501,7 @@
         }
 
         .system-status.offline {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.06);
             color: var(--text-secondary);
         }
 
@@ -564,7 +564,7 @@
         }
 
         .flow-path.grid-home {
-            stroke: rgba(255,255,255,0.3);
+            stroke: rgba(0,0,0,0.15);
             stroke-dasharray: 0;
         }
 
@@ -665,7 +665,7 @@
         }
 
         .grid-icon {
-            background: rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.09);
         }
 
         .battery-icon {
@@ -673,7 +673,7 @@
         }
 
         .home-icon {
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.06);
         }
 
         .node-label {
@@ -754,7 +754,7 @@
             position: absolute;
             inset: -2px;
             border-radius: 16px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            background: linear-gradient(135deg, rgba(0,0,0,0.09), transparent);
         }
 
         .power-card-icon.solar {
@@ -763,7 +763,7 @@
         }
 
         .power-card-icon.load {
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            background: linear-gradient(135deg, rgba(0,0,0,0.09), rgba(0,0,0,0.04));
         }
 
         .power-card-icon.battery {
@@ -772,7 +772,7 @@
         }
 
         .power-card-icon.grid {
-            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+            background: linear-gradient(135deg, rgba(0,0,0,0.07), rgba(0,0,0,0.04));
         }
 
         .power-card-content {
@@ -890,7 +890,7 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent);
         }
 
         .stat-item:hover {
@@ -993,13 +993,13 @@
         .stat-detail-content {
             width: 320px;
             max-height: 500px;
-            background: linear-gradient(180deg, #1E1E1E 0%, #181818 100%);
+            background: #ffffff;
             border-radius: 24px;
             padding: 24px;
             animation: modalSlide 0.3s ease;
             overflow-y: auto;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
         }
 
         .detail-section {
@@ -1011,7 +1011,7 @@
             color: var(--text-secondary);
             margin-bottom: 8px;
             padding-bottom: 6px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .detail-row {
@@ -1037,7 +1037,7 @@
 
         .detail-chart {
             height: 80px;
-            background: rgba(0,0,0,0.2);
+            background: #f5f5f7;
             border-radius: 8px;
             margin: 10px 0;
             display: flex;
@@ -1053,7 +1053,7 @@
             left: 4px;
             top: 8px;
             font-size: 8px;
-            color: rgba(255,255,255,0.4);
+            color: rgba(0,0,0,0.22);
         }
 
         .detail-bar {
@@ -1077,7 +1077,7 @@
             align-items: center;
             gap: 10px;
             padding: 8px 10px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.04);
             border-radius: 10px;
         }
 
@@ -1109,7 +1109,7 @@
             width: 320px;
             max-height: 520px;
             overflow-y: auto;
-            background: #1C1C1E;
+            background: #ffffff;
             border-radius: 20px;
             padding: 20px;
             animation: modalSlide 0.3s ease;
@@ -1170,12 +1170,12 @@
             align-items: center;
             gap: 10px;
             padding: 10px 12px;
-            background: rgba(255,255,255,0.04);
+            background: rgba(0,0,0,0.03);
             border-radius: 12px;
             margin-bottom: 6px;
             transition: background 0.2s;
         }
-        .discovered-item:hover { background: rgba(255,255,255,0.08); }
+        .discovered-item:hover { background: rgba(0,0,0,0.05); }
         .discovered-icon {
             font-size: 24px;
             flex-shrink: 0;
@@ -1205,7 +1205,7 @@
             flex-shrink: 0;
         }
         .discovered-add.added {
-            background: rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.09);
             color: var(--text-secondary);
             pointer-events: none;
         }
@@ -1222,14 +1222,14 @@
             top: 50%;
             width: 35%;
             height: 1px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.05);
         }
         .divider-text::before { left: 0; }
         .divider-text::after { right: 0; }
         .scan-hint {
             text-align: center;
             padding: 16px;
-            background: rgba(255,255,255,0.03);
+            background: rgba(0,0,0,0.02);
             border-radius: 12px;
         }
         .scan-hint code {
@@ -1279,8 +1279,8 @@
 
         .input-field {
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.09);
             border-radius: 12px;
             color: var(--text-primary);
             font-size: 14px;
@@ -1296,7 +1296,7 @@
         .suggest-dropdown {
             display: none;
             background: #1E1E1E;
-            border: 1px solid rgba(255,255,255,0.12);
+            border: 1px solid rgba(0,0,0,0.07);
             border-radius: 12px;
             margin-top: 4px;
             overflow: hidden;
@@ -1306,7 +1306,7 @@
         .suggest-item {
             padding: 10px 14px;
             cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
             transition: background 0.15s;
         }
         .suggest-item:last-child { border-bottom: none; }
@@ -1371,7 +1371,7 @@
         .device-icon svg {
             width: 28px;
             height: 28px;
-            fill: rgba(255, 255, 255, 0.6);
+            fill: rgba(0, 0, 0, 0.38);
         }
 
         .device-icon.active {
@@ -1402,7 +1402,7 @@
         .device-toggle {
             width: 52px;
             height: 32px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.06);
             border-radius: 16px;
             position: relative;
             cursor: pointer;
@@ -1485,7 +1485,7 @@
             width: 50px;
             height: 30px;
             border-radius: 15px;
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.07);
             position: relative;
             cursor: pointer;
             transition: background 0.3s;
@@ -1548,7 +1548,7 @@
             width: 100%;
             height: 8px;
             border-radius: 4px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.06);
             -webkit-appearance: none;
             appearance: none;
             outline: none;
@@ -1574,7 +1574,7 @@
             padding: 8px 14px;
             border-radius: 12px;
             border: 1px solid var(--border-subtle);
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
             color: var(--text-secondary);
             font-size: 12px;
             cursor: pointer;
@@ -1752,7 +1752,7 @@
             line-height: 1.6;
             margin-bottom: 20px;
             padding: 12px;
-            background: rgba(0,0,0,0.2);
+            background: #f5f5f7;
             border-radius: 10px;
         }
 
@@ -1870,7 +1870,7 @@
         .settings-icon svg {
             width: 26px;
             height: 26px;
-            fill: rgba(255, 255, 255, 0.7);
+            fill: rgba(0, 0, 0, 0.5);
         }
 
         .settings-icon.active svg {
@@ -1903,10 +1903,11 @@
         /* 底部导航 */
         .bottom-nav {
             height: 70px;
-            background: rgba(10, 10, 10, 0.95);
+            background: #ffffff;
             flex-shrink: 0;
             display: flex;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.04);
         }
 
         .nav-item {
@@ -2007,7 +2008,7 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent);
         }
 
         .chart-header {
@@ -2036,7 +2037,7 @@
         .curve-svg {
             width: 100%;
             height: 100px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2));
+            background: #f5f5f7;
             border-radius: 12px;
             padding: 8px;
         }
@@ -2177,7 +2178,7 @@
 
         .indicator-bar {
             height: 8px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.06);
             border-radius: 4px;
             overflow: hidden;
         }
@@ -2282,8 +2283,8 @@
             flex-shrink: 0;
             padding: 8px 16px;
             border-radius: 20px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.06);
             color: var(--text-secondary);
             font-size: 13px;
             cursor: pointer;
@@ -2299,7 +2300,7 @@
         }
 
         .station-tab:not(.active):hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.06);
             color: var(--text-primary);
         }
 
@@ -2386,7 +2387,7 @@
         .breakdown-bar-track {
             flex: 1;
             height: 8px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.05);
             border-radius: 4px;
             overflow: hidden;
         }
@@ -2449,8 +2450,8 @@
             width: 32px;
             height: 28px;
             border-radius: 6px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.06);
             color: var(--text-secondary);
             font-size: 11px;
             cursor: pointer;
@@ -2465,7 +2466,7 @@
         }
 
         .hour-btn:not(.active):hover {
-            background: rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.07);
             color: var(--text-primary);
         }
 
@@ -2626,7 +2627,7 @@
 
         .stats-tabs {
             display: flex;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .stats-tab {
@@ -2649,7 +2650,7 @@
 
         .stats-tab:not(.active):hover {
             color: var(--text-primary);
-            background: rgba(255,255,255,0.03);
+            background: rgba(0,0,0,0.02);
         }
 
         .stats-tab-content {
@@ -2664,7 +2665,7 @@
 
         .stats-summary-item {
             flex: 1;
-            background: rgba(0,0,0,0.2);
+            background: #f5f5f7;
             border-radius: 12px;
             padding: 12px;
             text-align: center;
@@ -2709,7 +2710,7 @@
 
         .curve-chart {
             height: 100px;
-            background: rgba(0,0,0,0.3);
+            background: #f5f5f7;
             border-radius: 10px;
             overflow: hidden;
         }
@@ -2988,17 +2989,17 @@
                                 </linearGradient>
                             </defs>
                             <!-- Y轴标签 -->
-                            <text x="2" y="15" fill="rgba(255,255,255,0.6)" font-size="10">50kW</text>
-                            <text x="2" y="38" fill="rgba(255,255,255,0.5)" font-size="10">38</text>
-                            <text x="2" y="62" fill="rgba(255,255,255,0.5)" font-size="10">25</text>
-                            <text x="2" y="87" fill="rgba(255,255,255,0.5)" font-size="10">0</text>
+                            <text x="2" y="15" fill="rgba(0,0,0,0.38)" font-size="10">50kW</text>
+                            <text x="2" y="38" fill="rgba(0,0,0,0.3)" font-size="10">38</text>
+                            <text x="2" y="62" fill="rgba(0,0,0,0.3)" font-size="10">25</text>
+                            <text x="2" y="87" fill="rgba(0,0,0,0.3)" font-size="10">0</text>
                             <!-- 背景网格 -->
-                            <line x1="40" y1="10" x2="320" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="40" y1="35" x2="320" y2="35" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="40" y1="60" x2="320" y2="60" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                            <line x1="40" y1="85" x2="320" y2="85" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="10" x2="320" y2="10" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+                            <line x1="40" y1="35" x2="320" y2="35" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+                            <line x1="40" y1="60" x2="320" y2="60" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                            <line x1="40" y1="85" x2="320" y2="85" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
                             <!-- Y轴线 -->
-                            <line x1="40" y1="5" x2="40" y2="95" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                            <line x1="40" y1="5" x2="40" y2="95" stroke="rgba(0,0,0,0.09)" stroke-width="1"/>
                             <!-- 光伏曲线 (白天高，晚上低) -->
                             <path id="solar-curve" d="" fill="none" stroke="#FFD60A" stroke-width="2.5"/>
                             <!-- 家庭用电曲线 -->
@@ -3008,7 +3009,7 @@
                             <!-- 电网状态曲线 (正=卖，负=买) -->
                             <path id="grid-curve" d="" fill="none" stroke="#5AC8FA" stroke-width="2"/>
                             <!-- 时间标记线 -->
-                            <line id="time-marker-line" x1="150" y1="5" x2="150" y2="95" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line id="time-marker-line" x1="150" y1="5" x2="150" y2="95" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
                         </svg>
                     </div>
                     <div class="curve-labels">
@@ -3473,17 +3474,17 @@
                     </div>
                     <svg class="curve-svg" viewBox="0 0 340 120" preserveAspectRatio="none">
                         <!-- Y轴标签 -->
-                        <text x="2" y="18" fill="rgba(255,255,255,0.6)" font-size="10">kW</text>
-                        <text x="2" y="32" fill="rgba(255,255,255,0.5)" font-size="10">1.5</text>
-                        <text x="2" y="62" fill="rgba(255,255,255,0.5)" font-size="10">0.5</text>
-                        <text x="2" y="100" fill="rgba(255,255,255,0.5)" font-size="10">0</text>
+                        <text x="2" y="18" fill="rgba(0,0,0,0.38)" font-size="10">kW</text>
+                        <text x="2" y="32" fill="rgba(0,0,0,0.3)" font-size="10">1.5</text>
+                        <text x="2" y="62" fill="rgba(0,0,0,0.3)" font-size="10">0.5</text>
+                        <text x="2" y="100" fill="rgba(0,0,0,0.3)" font-size="10">0</text>
                         <!-- Y轴线 -->
-                        <line x1="40" y1="10" x2="40" y2="110" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                        <line x1="40" y1="10" x2="40" y2="110" stroke="rgba(0,0,0,0.09)" stroke-width="1"/>
                         <!-- 背景网格 -->
                         <g class="grid-lines">
-                            <line x1="40" y1="30" x2="320" y2="30" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="40" y1="60" x2="320" y2="60" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <line x1="40" y1="90" x2="320" y2="90" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <line x1="40" y1="30" x2="320" y2="30" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+                            <line x1="40" y1="60" x2="320" y2="60" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+                            <line x1="40" y1="90" x2="320" y2="90" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
                         </g>
                         <!-- 电价曲线 (金色虚线, 右侧Y轴) -->
                         <path class="price-curve"
@@ -3499,7 +3500,7 @@
                             fill="none" stroke="#FF9500" stroke-width="2" opacity="0.7"/>
                         <!-- 当前时间标记 -->
                         <line class="time-marker" id="time-marker" x1="180" y1="10" x2="180" y2="110"
-                            stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
                     </svg>
                     <div class="chart-labels">
                         <span>00:00</span>
@@ -4121,7 +4122,7 @@
                 case 'standby':
                     statusText.textContent = '✓ 已切换至待机模式 - 储能系统暂停';
                     modeBadge.textContent = '待机模式';
-                    modeBadge.style.background = 'rgba(255,255,255,0.3)';
+                    modeBadge.style.background = 'rgba(0,0,0,0.15)';
                     modeBadge.style.color = 'var(--text-secondary)';
                     indicatorFill.style.width = '0%';
                     powerLabel.textContent = '0 kW';
@@ -4859,7 +4860,7 @@
             }
             if (rangeInput) {
                 const percent = (value - rangeInput.min) / (rangeInput.max - rangeInput.min) * 100;
-                rangeInput.style.background = `linear-gradient(to right, var(--green-primary) 0%, var(--green-primary) ${percent}%, rgba(255,255,255,0.1) ${percent}%, rgba(255,255,255,0.1) 100%)`;
+                rangeInput.style.background = `linear-gradient(to right, var(--green-primary) 0%, var(--green-primary) ${percent}%, rgba(0,0,0,0.06) ${percent}%, rgba(0,0,0,0.06) 100%)`;
             }
         }
 
@@ -4873,7 +4874,7 @@
         function initSliderBackgrounds() {
             document.querySelectorAll('.device-range').forEach(function(range) {
                 const percent = (range.value - range.min) / (range.max - range.min) * 100;
-                range.style.background = `linear-gradient(to right, var(--green-primary) 0%, var(--green-primary) ${percent}%, rgba(255,255,255,0.1) ${percent}%, rgba(255,255,255,0.1) 100%)`;
+                range.style.background = `linear-gradient(to right, var(--green-primary) 0%, var(--green-primary) ${percent}%, rgba(0,0,0,0.06) ${percent}%, rgba(0,0,0,0.06) 100%)`;
             });
         }
 
