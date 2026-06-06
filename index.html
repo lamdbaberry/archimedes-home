@@ -14,7 +14,7 @@
         }
 
         body {
-            background: #f2f7f3;
+            background: var(--bg-app);
             height: 100vh;
             width: 100vw;
             display: flex;
@@ -24,41 +24,72 @@
             margin: 0;
         }
 
-        /* 高级配色 - 绿色为主 */
+        /* 日间模式配色 */
         :root {
             --green-primary: #34C759;
             --green-light: #5DD87B;
             --green-dark: #248A3D;
             --gold-accent: #C9A227;
             --gold-light: #E8C547;
-            --bg-dark: #0A0A0A;
+            --bg-app: #f2f7f3;
             --bg-card: #fafcfa;
             --bg-card-hover: #f0f5f1;
+            --bg-nav: #f2f7f3;
+            --bg-modal: #ffffff;
+            --bg-input: #f0f2f0;
+            --bg-overlay: rgba(0,0,0,0.04);
             --text-primary: #1d1d1f;
             --text-secondary: rgba(0, 0, 0, 0.45);
             --text-tertiary: rgba(0, 0, 0, 0.25);
             --border-subtle: rgba(52, 199, 89, 0.08);
+            --border-nav: rgba(52, 199, 89, 0.15);
             --border-active: rgba(52, 199, 89, 0.6);
             --glow-green: rgba(52, 199, 89, 0.15);
             --glow-gold: rgba(201, 162, 39, 0.15);
+            --shadow-card: 0 2px 12px rgba(0,0,0,0.04);
+            --chart-text: rgba(0,0,0,0.3);
+            --chart-grid: rgba(0,0,0,0.04);
+            --chart-axis: rgba(0,0,0,0.09);
+            --phone-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 0 0 10px #e8e8ec, 0 0 0 12px #dcdce0, 0 40px 80px rgba(0,0,0,0.15);
+            --nav-shadow: 0 -2px 12px rgba(0,0,0,0.04);
+        }
+
+        /* 夜间模式配色 */
+        [data-theme="dark"] {
+            --bg-app: #0a0a0a;
+            --bg-card: rgba(22, 22, 22, 0.85);
+            --bg-card-hover: rgba(30, 30, 30, 0.9);
+            --bg-nav: rgba(10, 10, 10, 0.95);
+            --bg-modal: #1C1C1E;
+            --bg-input: #2c2c2e;
+            --bg-overlay: rgba(255,255,255,0.04);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.55);
+            --text-tertiary: rgba(255, 255, 255, 0.35);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-nav: rgba(255, 255, 255, 0.08);
+            --border-active: rgba(52, 199, 89, 0.4);
+            --glow-green: rgba(52, 199, 89, 0.25);
+            --glow-gold: rgba(201, 162, 39, 0.25);
+            --shadow-card: none;
+            --chart-text: rgba(255,255,255,0.5);
+            --chart-grid: rgba(255,255,255,0.05);
+            --chart-axis: rgba(255,255,255,0.15);
+            --phone-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 0 10px #141414, 0 0 0 12px #1A1A1A, 0 40px 80px rgba(0,0,0,0.7);
+            --nav-shadow: none;
         }
 
         /* 手机框架 */
         .phone-frame {
             width: 375px;
             height: 100%;
-            background: #f2f7f3;
+            background: var(--bg-app);
             border-radius: 44px;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow:
-                0 0 0 1px rgba(0,0,0,0.06),
-                0 0 0 10px #e8e8ec,
-                0 0 0 12px #dcdce0,
-                0 40px 80px rgba(0,0,0,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.9);
+            box-shadow: var(--phone-shadow);
         }
 
         /* 顶部刘海 */
@@ -86,6 +117,22 @@
             font-weight: 500;
             position: relative;
             z-index: 50;
+        }
+
+        .theme-toggle {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            cursor: pointer;
+            background: var(--bg-overlay);
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        .theme-toggle:hover {
+            background: var(--bg-card-hover);
         }
 
         /* Logo区域 */
@@ -166,7 +213,7 @@
             left: 0;
             right: 0;
             height: 280px;
-            background: #f2f7f3;
+            background: var(--bg-app);
             z-index: 0;
         }
 
@@ -994,7 +1041,7 @@
         .stat-detail-content {
             width: 320px;
             max-height: 500px;
-            background: #ffffff;
+            background: var(--bg-modal);
             border-radius: 24px;
             padding: 24px;
             animation: modalSlide 0.3s ease;
@@ -1038,7 +1085,7 @@
 
         .detail-chart {
             height: 80px;
-            background: #f2f7f3;
+            background: var(--bg-overlay);
             border-radius: 8px;
             margin: 10px 0;
             display: flex;
@@ -1110,7 +1157,7 @@
             width: 320px;
             max-height: 520px;
             overflow-y: auto;
-            background: #ffffff;
+            background: var(--bg-modal);
             border-radius: 20px;
             padding: 20px;
             animation: modalSlide 0.3s ease;
@@ -1755,7 +1802,7 @@
             line-height: 1.6;
             margin-bottom: 20px;
             padding: 12px;
-            background: #f2f7f3;
+            background: var(--bg-overlay);
             border-radius: 10px;
         }
 
@@ -1906,11 +1953,11 @@
         /* 底部导航 */
         .bottom-nav {
             height: 70px;
-            background: #f2f7f3;
+            background: var(--bg-nav);
             flex-shrink: 0;
             display: flex;
-            border-top: 1px solid rgba(52, 199, 89, 0.15);
-            box-shadow: 0 -2px 12px rgba(0,0,0,0.04);
+            border-top: 1px solid var(--border-nav);
+            box-shadow: var(--nav-shadow);
         }
 
         .nav-item {
@@ -2040,7 +2087,7 @@
         .curve-svg {
             width: 100%;
             height: 100px;
-            background: #f2f7f3;
+            background: var(--bg-overlay);
             border-radius: 12px;
             padding: 8px;
         }
@@ -2678,7 +2725,7 @@
 
         .stats-summary-item {
             flex: 1;
-            background: #f2f7f3;
+            background: var(--bg-overlay);
             border-radius: 12px;
             padding: 12px;
             text-align: center;
@@ -2723,7 +2770,7 @@
 
         .curve-chart {
             height: 100px;
-            background: #f2f7f3;
+            background: var(--bg-overlay);
             border-radius: 10px;
             overflow: hidden;
         }
@@ -2772,7 +2819,9 @@
         <!-- 状态栏 -->
         <div class="status-bar">
             <span id="time">12:30</span>
-            <span style="color: var(--green-primary);">●</span>
+            <div class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn">
+                <span class="theme-icon">☀</span>
+            </div>
         </div>
 
         <!-- 别墅背景 -->
@@ -3803,6 +3852,63 @@
     </div>
 
     <script>
+        // 日夜模式切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            const btn = document.getElementById('theme-toggle-btn');
+            if (btn) {
+                btn.querySelector('.theme-icon').textContent = newTheme === 'dark' ? '☽' : '☀';
+            }
+            updateChartColors(newTheme);
+        }
+
+        function updateChartColors(theme) {
+            // 更新SVG图表内联颜色
+            const isDark = theme === 'dark';
+            const textColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.3)';
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
+            const axisColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.09)';
+            const mainColor = isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.15)';
+            const labelColor = isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.38)';
+
+            document.querySelectorAll('svg text[fill]').forEach(el => {
+                const val = el.getAttribute('fill');
+                if (val && val.includes('rgba(0,0,0')) el.setAttribute('fill', textColor);
+            });
+            document.querySelectorAll('svg line[stroke]').forEach(el => {
+                const val = el.getAttribute('stroke');
+                if (!val) return;
+                if (val.includes('rgba(0,0,0,0.04)')) el.setAttribute('stroke', gridColor);
+                else if (val.includes('rgba(0,0,0,0.09)')) el.setAttribute('stroke', axisColor);
+                else if (val.includes('rgba(0,0,0,0.15)')) el.setAttribute('stroke', mainColor);
+            });
+            // SOC ring center circle
+            const socCenter = document.querySelector('#main-soc-circle');
+            if (!socCenter) return;
+            const parent = socCenter.parentElement;
+            const centerCircle = parent.querySelector('circle[r="52"]');
+            if (centerCircle) {
+                centerCircle.setAttribute('fill', isDark ? 'rgba(15,15,15,0.9)' : 'rgba(255,255,255,0.95)');
+            }
+        }
+
+        // 初始化主题
+        (function initTheme() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = saved === 'dark' || (!saved && prefersDark);
+            if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                const btn = document.getElementById('theme-toggle-btn');
+                if (btn) btn.querySelector('.theme-icon').textContent = '☽';
+            }
+            setTimeout(() => updateChartColors(isDark ? 'dark' : 'light'), 100);
+        })();
+
         // 页面切换
         function switchPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
